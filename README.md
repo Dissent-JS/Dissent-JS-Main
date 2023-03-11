@@ -34,7 +34,9 @@ To create a new component, run the following command in your terminal:
 
 yarn create-component component-name
 
-Replace `component-name` with the name of your new component. This will create a new folder in the `src/components` directory with the name of your component, and it will include an HTML file, a JavaScript file, and a Sass file. You can then import your new component into your project and use it like any other component, using `<div class="component-name"></div>.
+Replace `component-name` with the name of your new component. This will create a new folder in the `src/components` directory with the name of your component, and it will include an HTML file, a JavaScript file, and a Sass file. You can then import your new component into your project and use it like any other component, using:
+
+<div class="component-name"></div>
 
 ### Importing a component
 
