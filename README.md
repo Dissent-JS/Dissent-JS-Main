@@ -46,6 +46,12 @@ The import it with
 
 `<div class="view-name"></div>`
 
+To add a view to the navigation/menu, use this
+
+`yarn create-nav`
+
+and the view will be added to the navigation/menu in the header
+
 ## Conclusion
 
 Dissent.js provides a simple and easy way to create reusable components for your website or web application. By following the instructions provided in this README file, you should be able to get up and running with Dissent.js in no time. If you have any questions or run into any issues, feel free to open an issue on the GitHub repository.
