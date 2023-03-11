@@ -1,0 +1,9 @@
+@import "../../styles/variables.scss";
+
+.header {
+  background-color: $light-grey;
+  padding: 20px;
+  border-bottom: 4px solid black;
+  width: 100%;
+  height: 200px;
+}

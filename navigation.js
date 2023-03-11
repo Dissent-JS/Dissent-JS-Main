@@ -1,0 +1,1 @@
+module.exports = ['404', 'about', 'home'];
