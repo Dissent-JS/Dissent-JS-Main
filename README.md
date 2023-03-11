@@ -38,34 +38,13 @@ Replace `component-name` with the name of your new component. This will create a
 
 `<div class="component-name"></div>`
 
-### Importing a component
+### Creating a view
 
-To import a component into your project, follow these steps:
+`yarn create-view <view-name>`
 
-1. Create a new HTML file in the root of your project
-2. Add a `script` tag to your HTML file to import the library:
+The import it with
 
-<script src="./dist/myLibrary.min.js"></script>
-
-Replace slider with the name of your component.
-
-In your JavaScript file, import the component:
-
-import Slider from './components/slider/slider.js';
-
-Replace slider with the name of your component.
-
-Create a new instance of the component and initialize it:
-
-const sliderElement = document.querySelector('#slider');
-const slider = new Slider(sliderElement);
-slider.init();
-
-Replace slider with the name of your component.
-
-To create a new page, run the following command in your terminal:
-
-yarn create-page <page-name>
+`<div class="view-name"></div>`
 
 ## Conclusion
 
