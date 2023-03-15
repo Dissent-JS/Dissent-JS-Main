@@ -5,12 +5,3 @@ import './styles/typography.scss';
 
 import './helper.js';
 import './router.js';
-
-
-
-
-// import './views/home/home.js';
-// import './views/pants/pants.js';
-// import './views/about/about.js';
-
-

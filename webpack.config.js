@@ -1,12 +1,12 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const path = require('path');
 
 
 module.exports = {
-    mode: 'production',
+    mode: process.env.NODE_ENV || 'development',
     entry: ['./src/index.js'],
     output: {
         library: 'Dissent-JS',
@@ -21,23 +21,20 @@ module.exports = {
         port: 3600,
         open: true,
     },
-
+    externals: {
+        'jest-fetch-mock': 'fetchMock'
+    },
+    resolve: {
+        fallback: {
+            process: require.resolve('process/browser'),
+        },
+    },
     module: {
         rules: [
-            {
-                test: /\.scss$/,
-                use: [
-                    // Extract CSS into separate file
-                    MiniCssExtractPlugin.loader,
-                    // Convert CSS to JS
-                    'css-loader',
-                    // Compile Sass to CSS
-                    'sass-loader'
-                ],
-            },
+            // exclude test files from processing
             {
                 test: /\.js$/,
-                exclude: /node_modules/,
+                exclude: /(__tests__|node_modules)/,
                 use: {
                     loader: 'babel-loader',
                     options: {
@@ -45,13 +42,26 @@ module.exports = {
                     },
                 },
             },
+            // process other JS files
+            // process SCSS files
+            {
+                test: /\.scss$/,
+                exclude: /(__tests__|node_modules)/,
+                use: [
+                    MiniCssExtractPlugin.loader,
+                    'css-loader',
+                    'sass-loader'
+                ],
+            },
+            // process HTML files
             {
                 test: /\.html$/,
-                exclude: /node_modules/,
+                exclude: /(__tests__|node_modules)/,
                 use: 'html-loader',
             },
         ],
     },
+
     plugins: [
         new MiniCssExtractPlugin({
             filename: 'main.min.css',
@@ -60,6 +70,9 @@ module.exports = {
             patterns: [
                 { from: 'src/index.html', to: '.' },
             ],
+        }),
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
         }),
     ],
     optimization: {

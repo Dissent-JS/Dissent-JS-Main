@@ -6,7 +6,6 @@ function about() {
         async getData() {
             const response = await fetch('https://api.agify.io?name=anna');
             const data = await response.json();
-            console.log("data", data);
             return data;
         },
 
