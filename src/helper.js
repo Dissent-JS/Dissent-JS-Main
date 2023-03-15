@@ -79,5 +79,7 @@ if (process.env.NODE_ENV === 'test') {
     requireComponentTests.keys().forEach(requireComponentTests);
     requireLayoutTests.keys().forEach(requireLayoutTests);
     requireViewTests.keys().forEach(requireViewTests);
+} else {
+    console.log('Not in test mode');
 }
 
