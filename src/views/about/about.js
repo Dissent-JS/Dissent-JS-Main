@@ -21,3 +21,5 @@ function about() {
     getSomeDataForAnExample.render();
 
 };
+
+module.exports = { about };
