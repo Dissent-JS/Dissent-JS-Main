@@ -1,3 +1,3 @@
 function home() {
-    console.log("Home");
+    console.log('Home');
 }
