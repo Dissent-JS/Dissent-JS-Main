@@ -24,15 +24,11 @@ function about() {
 
 try {
     if (process.env.NODE_ENV === 'test') {
-        console.log('About XXXX');
         module.exports = { about };
-    } else {
-        console.log('We are in production mode');
     }
 } catch (error) {
-    if (error.name === 'ReferenceError' && error.message.includes('process is not defined')) {
-        console.log('We are in production mode');
-    } else {
+    if (!(error.name === 'ReferenceError' && error.message.includes('process is not defined'))) {
         console.error('An unexpected error occurred:', error);
     }
 }
+
