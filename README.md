@@ -52,6 +52,12 @@ To add a view to the navigation/menu, use this
 
 and the view will be added to the navigation/menu in the header
 
+### Testing
+
+'yarn jest`
+
+although the intention is to make Dissent.js agnostic, Jest hass been added as a kickstarter to add testing. Other testing libraries will be considered later. In this version of Dissent.js, the tests are removed from the src folder and placed in the __test__ folder. This is allow us ease in adding libraries as we move on.
+
 ## Conclusion
 
 Dissent.js provides a simple and easy way to create reusable components for your website or web application. By following the instructions provided in this README file, you should be able to get up and running with Dissent.js in no time. If you have any questions or run into any issues, feel free to open an issue on the GitHub repository.
