@@ -71,10 +71,6 @@ module.exports = {
                 { from: 'src/index.html', to: '.' },
             ],
         }),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
-            'process.env.MY_ENV': JSON.stringify(process.env.MY_ENV),
-        }),
     ],
     optimization: {
         minimizer: [
