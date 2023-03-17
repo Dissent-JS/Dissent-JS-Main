@@ -6,7 +6,6 @@ function about() {
         async getData() {
             const response = await fetch('https://api.agify.io?name=anna');
             const data = await response.json();
-            console.log("data", data);
             return data;
         },
 
@@ -22,3 +21,14 @@ function about() {
     getSomeDataForAnExample.render();
 
 };
+
+try {
+    if (process.env.NODE_ENV === 'test') {
+        module.exports = { about };
+    }
+} catch (error) {
+    if (!(error.name === 'ReferenceError' && error.message.includes('process is not defined'))) {
+        console.error('An unexpected error occurred:', error);
+    }
+}
+
