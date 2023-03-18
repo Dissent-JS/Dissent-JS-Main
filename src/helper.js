@@ -1,20 +1,21 @@
 function initiate() {
+
     const requireComponent = require.context(
         './components',
         true,
-        /\.(js|scss)$/
+        /\.(js)$/
     );
 
     const requireLayout = require.context(
         './layout',
         true,
-        /\.(js|scss)$/
+        /\.(js)$/
     );
 
     const requireView = require.context(
         './views',
         true,
-        /\.(js|scss)$/
+        /\.(js)$/
     );
 
     const componentFiles = requireComponent.keys();
@@ -28,19 +29,28 @@ function initiate() {
             fileName = componentFiles[i]
             name = fileName.split('/').pop().replace(/\.\w+$/, '')
             module = requireComponent(fileName)
-            require(`./components/${name}/${name}.scss`)
+            if (process.env.NODE_ENV !== 'production') {
+                console.log("arrrggeeeee");
+                require(`./components/${name}/${name}.scss`)
+            }
             Class = Object.values(module).find((exportedValue) => typeof exportedValue === 'function')
         } else if (i < componentFiles.length + layoutFiles.length) {
             fileName = layoutFiles[i - componentFiles.length];
             name = fileName.split('/').pop().replace(/\.\w+$/, '');
             module = requireLayout(fileName);
-            require(`./layout/${name}/${name}.scss`);
+            if (process.env.NODE_ENV !== 'production') {
+                console.log("arrrggeeeee");
+                require(`./layout/${name}/${name}.scss`);
+            }
             Class = Object.values(module).find((exportedValue) => typeof exportedValue === 'function');
         } else {
             fileName = viewFiles[i - componentFiles.length - layoutFiles.length];
             name = fileName.split('/').pop().replace(/\.\w+$/, '');
             module = requireView(fileName);
-            require(`./views/${name}/${name}.scss`);
+            if (process.env.NODE_ENV !== 'production') {
+                console.log("arrrggeeeee");
+                require(`./views/${name}/${name}.scss`);
+            }
             Class = Object.values(module).find((exportedValue) => typeof exportedValue === 'function');
         }
 
@@ -81,5 +91,12 @@ if (process.env.NODE_ENV === 'test') {
     requireViewTests.keys().forEach(requireViewTests);
 } else {
     console.log('Not in test mode');
+}
+
+
+if (process.env.NODE_ENV === 'production') {
+    console.log('production mode', process.env.NODE_ENV);
+} else {
+    console.log('development mode', process.env.NODE_ENV);
 }
 

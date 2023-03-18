@@ -31,7 +31,6 @@ module.exports = {
     },
     module: {
         rules: [
-            // exclude test files from processing
             {
                 test: /\.js$/,
                 exclude: /(__tests__|node_modules)/,
@@ -42,8 +41,6 @@ module.exports = {
                     },
                 },
             },
-            // process other JS files
-            // process SCSS files
             {
                 test: /\.scss$/,
                 exclude: /(__tests__|node_modules)/,
