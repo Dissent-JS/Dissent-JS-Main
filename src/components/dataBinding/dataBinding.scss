@@ -1,0 +1,6 @@
+@import "../../styles/mixin.scss"; // remove if not needed
+
+.dataBinding {
+  // Component styles go here
+  @include counter-container;
+}

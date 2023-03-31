@@ -12,16 +12,14 @@ const componentDir = path.join(__dirname, 'src', 'components', componentName)
 fs.mkdirSync(componentDir)
 
 // Create the HTML file
-const htmlContent = `<div class="${componentName}">
-  <!-- Component HTML goes here -->
-</div>`
+const htmlContent = `<!-- Component HTML goes here -->`
 const htmlPath = path.join(componentDir, `${componentName}.html`)
 fs.writeFileSync(htmlPath, htmlContent)
 
 // Create the SCSS file
 const scssContent = `@import '../../styles/mixin.scss';  // remove if not needed
 
-#${componentName} {
+.${componentName} {
   // Component styles go here
 }
 `
