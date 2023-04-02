@@ -11,8 +11,8 @@
     "create-component": "node createComponent.js",
     "create-view": "node createView.js",
     "create-nav": "node createNav.js",
-    "build": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/images dist/images && cp -R src/views dist/views",
-    "postbuild": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/layout/**/*.js ./dist/layout/**/*.scss ./dist/layout/**/*.css ./dist/views/**/*.scss ./dist/views/**/*.css",
+    "build": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images",
+    "postbuild": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/layout/**/*.js ./dist/layout/**/*.scss ./dist/layout/**/*.css ./dist/views/**/*.scss ./dist/views/**/*.css ",
     "start": "webpack-dev-server --open --mode development"
   },
   "devDependencies": {

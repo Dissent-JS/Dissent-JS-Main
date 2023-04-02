@@ -1,7 +1,8 @@
 @import "../../styles/mixin.scss"; // remove if not needed
 
-#homeview {
+.homeview {
   // Component styles go here
+  background-color: red;
   .counter {
     background-color: cornsilk;
   }
