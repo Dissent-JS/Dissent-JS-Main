@@ -60,4 +60,4 @@ although the intention is to make Dissent.js agnostic, Jest hass been added as a
 
 ## Conclusion
 
-Dissent.js provides a simple and easy way to create reusable components for your website or web application. By following the instructions provided in this README file, you should be able to get up and running with Dissent.js in no time. If you have any questions or run into any issues, feel free to open an issue on the GitHub repository.
+Dissent.js provides a simple and easy way to create reusable components for your web application. If you have any questions or run into any issues, feel free to open an issue on the GitHub repository.
