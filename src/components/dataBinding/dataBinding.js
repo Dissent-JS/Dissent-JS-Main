@@ -1,5 +1,3 @@
-import './dataBinding.scss'
-
 export default class dataBinding {
   constructor(element) {
     this.element = element

@@ -2,7 +2,6 @@ function home() {
     console.log('Home');
 }
 
-
 try {
     if (process.env.NODE_ENV === 'test') {
         module.exports = { home };

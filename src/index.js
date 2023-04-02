@@ -5,9 +5,5 @@ import './styles/mixin.scss';
 import "./styles/global.scss";
 import './styles/typography.scss';
 
-// import './views/home/home.scss';
-// import './views/about/about.scss';
-
-
 import './helper.js';
 import './router.js';

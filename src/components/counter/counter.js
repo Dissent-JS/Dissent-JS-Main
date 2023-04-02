@@ -1,5 +1,3 @@
-import './counter.scss'
-
 export default class Counter {
   constructor(element, fetchFn = window.fetch.bind(window)) {
     this.element = element;

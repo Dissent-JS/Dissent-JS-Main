@@ -1,5 +1,3 @@
-import './footer.scss'
-
 export default class footer {
   constructor(element) {
     this.element = element
