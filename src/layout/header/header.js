@@ -1,5 +1,3 @@
-import './header.scss'
-
 export default class header {
   constructor(element) {
     this.element = element

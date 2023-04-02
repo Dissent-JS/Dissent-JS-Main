@@ -1,8 +1,9 @@
 @import "../../styles/mixin.scss"; // remove if not needed
 
-#aboutview {
+.aboutview {
   // Component styles go here
-  .counter {
-    background-color: lightpink;
-  }
+  background-color: lightcyan;
+  border: 4px solid grey;
+  margin: 20px auto;
+  padding: 10px;
 }

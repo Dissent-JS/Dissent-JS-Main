@@ -12,7 +12,9 @@ const componentDir = path.join(__dirname, 'src', 'components', componentName)
 fs.mkdirSync(componentDir)
 
 // Create the HTML file
-const htmlContent = `<!-- Component HTML goes here -->`
+const htmlContent = `<!-- Component HTML goes here -->
+<h2>${componentName}</h2>`
+
 const htmlPath = path.join(componentDir, `${componentName}.html`)
 fs.writeFileSync(htmlPath, htmlContent)
 

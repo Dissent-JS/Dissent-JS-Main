@@ -1,5 +1,3 @@
-import './shadowcounter.scss'
-
 export default class ShadowCounter {
   constructor(element) {
     this.element = element;
