@@ -4,11 +4,12 @@ export default class ShadowCounter {
   }
 
   async init() {
-    const shadowRoot = this.element.attachShadow({ mode: 'closed' });
 
+    const shadowRoot = this.element.attachShadow({ mode: 'closed' });
     const response = await fetch('./components/shadowcounter/shadowcounter.html');
     const html = await response.text();
     shadowRoot.innerHTML = html;
+
 
     console.log('ShadowCounter initialized');
 
@@ -29,11 +30,9 @@ export default class ShadowCounter {
       const myShadowCounter = shadowRoot.getElementById('myShadowCounter');
       myShadowCounter.innerHTML = parseInt(myShadowCounter.innerHTML) + 1;
     };
+
   }
 }
-
-
-
 
 /**
  * Here, we're using the attachShadow method to create a shadow root for the component's element. 
