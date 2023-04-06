@@ -40,7 +40,7 @@ export default class ${componentName} {
     if (process.env.NODE_ENV !== 'production') {
       const response = await fetch('components/${componentName}/${componentName}.html');
       const ${componentName}html = await response.text();
-      this.element.innerHTML = html;
+      this.element.innerHTML = ${componentName}html;
     }
     // your code goes here
   }
