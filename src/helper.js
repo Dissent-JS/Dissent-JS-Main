@@ -1,100 +1,73 @@
-function initiate() {
-    // Your existing initiate function code...
+async function initiate() {
 
     const requireComponent = require.context('./components', true, /\.(js)$/);
     const requireLayout = require.context('./layout', true, /\.(js)$/);
     const requireView = require.context('./views', true, /\.(js)$/);
-
-    const componentFiles = requireComponent.keys();
-    const layoutFiles = requireLayout.keys();
     const viewFiles = requireView.keys();
 
-    console.log('Loading views...');
+    const viewPromises = [];
     for (let i = 0; i < viewFiles.length; i++) {
         let fileName = viewFiles[i];
+        viewPromises.push(requireView(fileName));
         let name = fileName.split('/').pop().replace(/\.\w+$/, '');
-        let module = requireView(fileName);
         if (process.env.NODE_ENV !== 'production') {
             require(`./views/${name}/${name}.scss`);
         }
-        let Class = Object.values(module).find(
-            (exportedValue) => typeof exportedValue === 'function'
-        );
-
-        if (Class) {
-            let elements = document.querySelectorAll(`.${name}`);
-            elements.forEach(async function (element) {
-                let instance = new Class(element);
-                await instance.init();
-            });
-        } else {
-            let elements = document.querySelectorAll(`.${name}`);
-        }
     }
-    console.log('Views loaded.');
+    await Promise.all(viewPromises).then(async () => {
 
-    console.log('Loading components and layouts...');
-    for (let i = 0; i < componentFiles.length + layoutFiles.length; i++) {
-        let fileName, name, module, Class;
+        const componentLayoutPromises = [];
+        const componentFiles = requireComponent.keys();
+        const layoutFiles = requireLayout.keys();
+        for (let i = 0; i < componentFiles.length + layoutFiles.length; i++) {
+            let fileName, name, module, Class;
 
-        if (i < componentFiles.length) {
-            fileName = componentFiles[i];
-            name = fileName.split('/').pop().replace(/\.\w+$/, '');
-            module = requireComponent(fileName);
-            if (process.env.NODE_ENV !== 'production') {
-                require(`./components/${name}/${name}.scss`);
+            if (i < componentFiles.length) {
+                fileName = componentFiles[i];
+                name = fileName.split('/').pop().replace(/\.\w+$/, '');
+                module = requireComponent(fileName);
+                if (process.env.NODE_ENV !== 'production') {
+                    require(`./components/${name}/${name}.scss`);
+                }
+                Class = Object.values(module).find(
+                    (exportedValue) => typeof exportedValue === 'function'
+                );
+            } else {
+                fileName = layoutFiles[i - componentFiles.length];
+                name = fileName.split('/').pop().replace(/\.\w+$/, '');
+                module = requireLayout(fileName);
+                if (process.env.NODE_ENV !== 'production') {
+                    require(`./layout/${name}/${name}.scss`);
+                }
+                Class = Object.values(module).find(
+                    (exportedValue) => typeof exportedValue === 'function'
+                );
             }
-            Class = Object.values(module).find(
-                (exportedValue) => typeof exportedValue === 'function'
-            );
-        } else {
-            fileName = layoutFiles[i - componentFiles.length];
-            name = fileName.split('/').pop().replace(/\.\w+$/, '');
-            module = requireLayout(fileName);
-            if (process.env.NODE_ENV !== 'production') {
-                require(`./layout/${name}/${name}.scss`);
-            }
-            Class = Object.values(module).find(
-                (exportedValue) => typeof exportedValue === 'function'
-            );
-        }
 
-        if (Class) {
-            let elements = document.querySelectorAll(`.${name}`);
-            elements.forEach(async function (element) {
-                let instance = new Class(element);
-                await instance.init();
-            });
-        } else {
-            let elements = document.querySelectorAll(`.${name}`);
+            if (Class) {
+                let elements = document.querySelectorAll(`.${name}`);
+                elements.forEach(function (element) {
+                    let instance = new Class(element);
+                    componentLayoutPromises.push(instance.init());
+                });
+            } else {
+                let elements = document.querySelectorAll(`.${name}`);
+                break;
+            }
         }
-    }
-    console.log('Components and layouts loaded.');
+        await Promise.all(componentLayoutPromises);
+    });
 }
 
 window.onload = () => {
+    initiate();
+};
+
+window.onpopstate = () => {
     setTimeout(() => {
         initiate();
-    }, 500);
+    }, 100);
 };
-
-window.onpopstate = function (event) {
-    setTimeout(() => {
-        initiate();
-    }, 300);
-};
-
-window.onload = async () => {
-    await initiate();
-};
-
-const urlChangeEvent = new Event('urlChange');
-
-window.addEventListener('urlChange', async () => {
-    await initiate();
-});
-
-// Import all test files
 
 if (process.env.NODE_ENV === 'test') {
     const requireComponentTests = require.context('../__tests__/components', true, /\.test\.js$/);
@@ -107,7 +80,6 @@ if (process.env.NODE_ENV === 'test') {
 } else {
     console.log('Not in test mode');
 }
-
 
 if (process.env.NODE_ENV === 'production') {
     console.log('production mode', process.env.NODE_ENV);
