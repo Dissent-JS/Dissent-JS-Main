@@ -44,15 +44,21 @@ async function initiate() {
                 );
             }
 
+
+            const elements = document.querySelectorAll(`.${name}`);
             if (Class) {
-                let elements = document.querySelectorAll(`.${name}`);
-                elements.forEach(function (element) {
-                    let instance = new Class(element);
-                    componentLayoutPromises.push(instance.init());
+                const componentLayoutPromises = Array.from(elements, element => {
+                    const instance = new Class(element);
+                    return instance.init();
                 });
-            } else {
-                let elements = document.querySelectorAll(`.${name}`);
-                break;
+
+                setTimeout(() => {
+                    const components = document.querySelectorAll(`header .${name}, footer .${name}`);
+                    const componentLayoutPromises = Array.from(components, element => {
+                        const instance = new Class(element);
+                        return instance.init();
+                    });
+                }, 300);
             }
         }
         await Promise.all(componentLayoutPromises);
@@ -66,7 +72,8 @@ window.onload = () => {
 window.onpopstate = () => {
     setTimeout(() => {
         initiate();
-    }, 100);
+    }, 150);
+
 };
 
 if (process.env.NODE_ENV === 'test') {
@@ -77,13 +84,5 @@ if (process.env.NODE_ENV === 'test') {
     requireComponentTests.keys().forEach(requireComponentTests);
     requireLayoutTests.keys().forEach(requireLayoutTests);
     requireViewTests.keys().forEach(requireViewTests);
-} else {
-    console.log('Not in test mode');
-}
-
-if (process.env.NODE_ENV === 'production') {
-    console.log('production mode', process.env.NODE_ENV);
-} else {
-    console.log('development mode', process.env.NODE_ENV);
 }
 
