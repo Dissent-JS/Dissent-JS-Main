@@ -13,8 +13,8 @@
     "create-nav": "node createNav.js",
     "merge-scss": "node compile-scss.js",
     "prebuild": "node write-components-to-html.js",
-    "build": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images && yarn merge-scss",
-    "postbuild": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/components/**/*.html ./dist/components/ ./dist/layout/**/*.js ./dist/layout/**/*.scss ./dist/layout/**/*.css ./dist/views/**/*.scss ./dist/views/**/*.css ./dist/views/**/*.html ./src/views/**/*.template ./src/layout/**/*.template && node remove-template-extension.js",
+    "build": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images && cp src/index.html.template dist/index.html.template && yarn merge-scss ",
+    "postbuild": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/components/**/*.html ./dist/components/ ./dist/layout/**/*.js ./dist/layout/**/*.scss ./dist/layout/**/*.css ./dist/views/**/*.scss ./dist/views/**/*.css ./dist/views/**/*.html ./src/views/**/*.template ./src/layout/**/*.template ./src/index.html.template ./dist/index.html  && node remove-template-extension.js",
     "start": "webpack-dev-server --open --mode development"
   },
   "devDependencies": {

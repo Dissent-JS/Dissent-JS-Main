@@ -3,6 +3,7 @@ const path = require('path');
 
 const viewsDirectory = './dist/views';
 const layoutDirectory = './dist/layout';
+const rootDirectory = './dist/';
 
 function processDirectory(directory) {
     fs.readdir(directory, (err, items) => {
@@ -33,3 +34,4 @@ function renameFile(filePath) {
 
 processDirectory(viewsDirectory);
 processDirectory(layoutDirectory);
+processDirectory(rootDirectory);
