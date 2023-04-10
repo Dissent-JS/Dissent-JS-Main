@@ -37,9 +37,12 @@ export default class ${componentName} {
   }
 
   async init() {
-    const response = await fetch('components/${componentName}/${componentName}.html');
-    const ${componentName}html = await response.text();
-    this.element.innerHTML = ${componentName}html;
+    if (process.env.NODE_ENV !== 'production') {
+      const response = await fetch('components/${componentName}/${componentName}.html');
+      const ${componentName}html = await response.text();
+      this.element.innerHTML = ${componentName}html;
+    }
+    // your code goes here
   }
 }
 `
