@@ -2,7 +2,16 @@ const fs = require('fs');
 const path = require('path');
 
 const viewsDirectory = './src/views/';
+const layoutDirectory = './src/layout/';
 const componentsDirectory = './src/components/';
+const navFile = './src/layout/nav/nav.html';
+
+function processMultipleDirectories(...directories) {
+    directories.forEach((directory) => {
+        processDirectory(directory);
+    });
+}
+
 
 function processDirectory(directory) {
     fs.readdir(directory, (err, items) => {
@@ -42,9 +51,19 @@ function processViewFile(viewFilePath) {
             }
         }
 
+        // Inject the nav file into the header
+        const headerRegex = /<div id="nav">([\s\S]*?)<\/div>/;
+        const headerMatch = headerRegex.exec(viewContent);
+
+        if (headerMatch && fs.existsSync(navFile)) {
+            const navContent = fs.readFileSync(navFile, 'utf8');
+            const headerReplacement = `<div id="nav">${navContent}${headerMatch[1]}</div>`;
+            viewContent = viewContent.replace(headerMatch[0], headerReplacement);
+        }
+
         fs.writeFileSync(`${viewFilePath}.template`, viewContent);
     }
 }
 
+processMultipleDirectories(viewsDirectory, layoutDirectory);
 
-processDirectory(viewsDirectory);
