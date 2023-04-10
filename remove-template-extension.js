@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require('path');
 
 const viewsDirectory = './dist/views';
+const layoutDirectory = './dist/layout';
 
 function processDirectory(directory) {
     fs.readdir(directory, (err, items) => {
@@ -23,7 +24,6 @@ function processDirectory(directory) {
 function renameFile(filePath) {
     const fileExtension = path.extname(filePath);
 
-    // Only process .template files
     if (fileExtension === '.template') {
         const newFilePath = filePath.slice(0, -fileExtension.length);
         fs.renameSync(filePath, newFilePath);
@@ -32,3 +32,4 @@ function renameFile(filePath) {
 }
 
 processDirectory(viewsDirectory);
+processDirectory(layoutDirectory);

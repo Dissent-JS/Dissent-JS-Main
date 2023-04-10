@@ -66,7 +66,7 @@ window.onload = () => {
 window.onpopstate = () => {
     setTimeout(() => {
         initiate();
-    }, 100);
+    }, 150);
 };
 
 if (process.env.NODE_ENV === 'test') {
