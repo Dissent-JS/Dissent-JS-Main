@@ -44,6 +44,7 @@ async function initiate() {
                 );
             }
 
+
             const elements = document.querySelectorAll(`.${name}`);
             if (Class) {
                 const componentLayoutPromises = Array.from(elements, element => {
@@ -72,6 +73,7 @@ window.onpopstate = () => {
     setTimeout(() => {
         initiate();
     }, 150);
+
 };
 
 if (process.env.NODE_ENV === 'test') {
@@ -83,3 +85,4 @@ if (process.env.NODE_ENV === 'test') {
     requireLayoutTests.keys().forEach(requireLayoutTests);
     requireViewTests.keys().forEach(requireViewTests);
 }
+

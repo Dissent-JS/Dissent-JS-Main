@@ -12,6 +12,7 @@ function processMultipleDirectories(...directories) {
     });
 }
 
+
 function processDirectory(directory) {
     fs.readdir(directory, (err, items) => {
         if (err) throw err;
@@ -65,3 +66,4 @@ function processViewFile(viewFilePath) {
 }
 
 processMultipleDirectories(viewsDirectory, layoutDirectory);
+
