@@ -15,11 +15,11 @@ function processHeaderAndFooter() {
 
     let updatedIndexContent = indexContent;
     if (indexHeaderMatch) {
-        const indexHeaderReplacement = `<header>${headerContent}</header>`;
+        const indexHeaderReplacement = `<header class="header">${headerContent}</header>`;
         updatedIndexContent = updatedIndexContent.replace(indexHeaderMatch[0], indexHeaderReplacement);
     }
     if (indexFooterMatch) {
-        const indexFooterReplacement = `<footer>${footerContent}</footer>`;
+        const indexFooterReplacement = `<footer class="footer">${footerContent}</footer>`;
         updatedIndexContent = updatedIndexContent.replace(indexFooterMatch[0], indexFooterReplacement);
     }
     fs.writeFileSync(indexPath + ".template", updatedIndexContent);
