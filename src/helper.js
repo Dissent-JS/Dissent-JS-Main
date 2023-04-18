@@ -58,7 +58,7 @@ async function initiate() {
                         const instance = new Class(element);
                         return instance.init();
                     });
-                }, 250);
+                }, 300);
             }
         }
         await Promise.all(componentLayoutPromises);
@@ -72,7 +72,8 @@ window.onload = () => {
 window.onpopstate = () => {
     setTimeout(() => {
         initiate();
-    }, 250);
+    }, 150);
+
 };
 
 if (process.env.NODE_ENV === 'test') {

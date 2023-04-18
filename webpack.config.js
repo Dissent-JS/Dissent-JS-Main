@@ -1,40 +1,9 @@
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const TerserWebpackPlugin = require('terser-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const webpack = require('webpack');
-const glob = require('glob');
 const path = require('path');
 
-
-const htmlFiles = glob.sync('dist/**/*.html');
-
-const plugins = [
-    new MiniCssExtractPlugin({
-        filename: 'main.min.css',
-    }),
-    new CopyWebpackPlugin({
-        patterns: [
-            { from: 'src/index.html', to: '.' },
-        ],
-    })
-];
-
-for (const file of htmlFiles) {
-    plugins.push(
-        new HtmlWebpackPlugin({
-            template: path.resolve(__dirname, file),
-            minify: {
-                collapseWhitespace: true,
-                removeComments: true,
-                removeRedundantAttributes: true,
-                removeScriptTypeAttributes: true,
-                removeStyleLinkTypeAttributes: true,
-                useShortDoctype: true
-            }
-        })
-    );
-}
 
 module.exports = {
     mode: process.env.NODE_ENV || 'development',
@@ -90,7 +59,16 @@ module.exports = {
         ],
     },
 
-    plugins,
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: 'main.min.css',
+        }),
+        new CopyWebpackPlugin({
+            patterns: [
+                { from: 'src/index.html', to: '.' },
+            ],
+        }),
+    ],
     optimization: {
         minimizer: [
             new TerserWebpackPlugin({
