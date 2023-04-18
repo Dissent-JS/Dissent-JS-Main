@@ -11,10 +11,16 @@
     "create-component": "node createComponent.js",
     "create-view": "node createView.js",
     "create-nav": "node createNav.js",
+    "remove-template": "node remove-template-extension.js",
     "merge-scss": "node compile-scss.js",
+    "footer-header": "node write-layout-to-index.js",
     "prebuild": "node write-components-to-html.js",
-    "build": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images && yarn merge-scss",
-    "postbuild": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/components/**/*.html ./dist/components/ ./dist/layout/**/*.js ./dist/layout/**/*.scss ./dist/layout/**/*.css ./dist/views/**/*.scss ./dist/views/**/*.css ./dist/views/**/*.html ./src/views/**/*.template ./src/layout/**/*.template && node remove-template-extension.js",
+    "build-1": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images && yarn merge-scss ",
+    "build-2":"yarn footer-header",
+    "build-3":"cp src/index.html.template dist/index.html.template && rimraf ./dist/components/**/*.html ./dist/views/**/*.html ./dist/index.html",
+    "build-4":"yarn remove-template",
+    "build": "yarn build-1 && yarn build-2 && yarn build-3 && yarn build-4",
+    "postbuild": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/components/**/*.html ./dist/components/ ./dist/views/**/*.scss ./dist/views/**/*.css  ./src/views/**/*.template ./src/layout/**/*.template ./src/index.html.template",
     "start": "webpack-dev-server --open --mode development"
   },
   "devDependencies": {
