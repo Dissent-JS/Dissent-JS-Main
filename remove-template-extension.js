@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 
-// const viewsDirectory = './dist/views';
 const layoutDirectory = './dist/layout';
 const rootDirectory = './dist/';
 
@@ -32,6 +31,5 @@ function renameFile(filePath) {
     }
 }
 
-// processDirectory(viewsDirectory);
 processDirectory(layoutDirectory);
 processDirectory(rootDirectory);
