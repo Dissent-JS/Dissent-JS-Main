@@ -15,11 +15,26 @@ function loadView(view) {
         });
 }
 
+function userIsLoggedIn() {
+    // Check for logged-in status, e.g., using local storage or session storage
+    // Return true if the user is logged in, false otherwise
+    // This is just an example, replace with your actual login status check
+    const loggedIn = localStorage.getItem('loggedIn');
+    return loggedIn === 'true';
+}
+
 function router() {
     const path = getRouteFromUrl();
 
     if (!path || path === "/") {
-        loadView('/home/home.html');
+        // Check if the user is logged in
+        if (userIsLoggedIn()) {
+            window.location.hash = '#home';
+        } else {
+            loadView('/login/login.html');
+        }
+    } else if (path === "fail") {
+        loadView('/fail/fail.html');
     } else if (path) {
         loadView(path + "/" + path + ".html");
         setTimeout(() => {
@@ -41,6 +56,7 @@ function router() {
         loadView('404/404.html');
     }
 }
+
 
 
 function getRouteFromUrl() {
