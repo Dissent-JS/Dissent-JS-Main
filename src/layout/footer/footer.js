@@ -5,8 +5,10 @@ export default class footer {
 
   async init() {
 
-    const response = await fetch('layout/footer/footer.html');
-    const footerhtml = await response.text();
-    this.element.innerHTML = footerhtml;
+    if (process.env.NODE_ENV !== 'production') {
+      const response = await fetch('layout/footer/footer.html');
+      const footerhtml = await response.text();
+      this.element.innerHTML = footerhtml;
+    }
   }
 }
