@@ -25,13 +25,16 @@ function userIsLoggedIn() {
 
 function router() {
     const path = getRouteFromUrl();
+    console.log("Path", path);
+    if (!path) {
 
-    if (!path || path === "/") {
         // Check if the user is logged in
         if (userIsLoggedIn()) {
+            console.log("User is logged in");
             window.location.hash = '#home';
         } else {
             loadView('/login/login.html');
+            console.log("User is not logged in");
         }
     } else if (path === "fail") {
         loadView('/fail/fail.html');
