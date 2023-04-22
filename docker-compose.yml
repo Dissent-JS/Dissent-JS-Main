@@ -1,0 +1,14 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - MONGO_URI=mongodb://db:27027/tasks
+  db:
+    image: "mongo:latest"
+    ports:
+      - "27023:27017"
