@@ -74,6 +74,7 @@ module.exports = {
         new CopyWebpackPlugin({
             patterns: [
                 { from: 'src/index.html', to: '.' },
+                { from: 'src/404.html', to: '.' },
             ],
         }),
     ],

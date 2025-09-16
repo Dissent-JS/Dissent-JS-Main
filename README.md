@@ -28,7 +28,48 @@ To build the library for production, run the following command:
 
 yarn build
 
-This will create a `dist` folder in the root of your project that contains all the necessary files for deployment as a dynamic single-page application.
+This will create a `dist` folder in the root of your project that contains all the necessary files for deployment as a dynamic single-page application with clean URLs (e.g., `/home`, `/about` instead of `/#home`, `/#about`).
+
+**Clean URL Routing:**
+
+- Uses History API instead of hash-based routing
+- Clean URLs like `yoursite.com/home`, `yoursite.com/about`
+- Automatic redirect from root URL (`/`) to `/home`
+- Browser back/forward button support
+- **Server Configuration for Clean URLs:**
+
+For clean URL routing to work, your server must serve `index.html` for all routes. Here are examples for common hosting platforms:
+
+- **Apache (.htaccess):**
+
+  ```apache
+  <IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+  </IfModule>
+  ```
+
+- **Nginx:**
+
+  ```nginx
+  server {
+    listen 80;
+    server_name yoursite.com;
+    root /path/to/dist;
+    index index.html;
+
+    location / {
+      try_files $uri $uri/ /index.html;
+    }
+  }
+  ```
+
+- **Netlify/Vercel:** No configuration needed - handled automatically
+- **GitHub Pages:** Automatic support included (uses `404.html` redirect)
 
 ### Building static HTML pages for SEO
 

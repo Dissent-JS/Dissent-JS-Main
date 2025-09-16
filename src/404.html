@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <script>
+        // Redirect to index.html while preserving the path for SPA routing
+        var path = window.location.pathname;
+        window.location.href = '/?' + path.slice(1);
+    </script>
+</head>
+<body>
+</body>
+</html>

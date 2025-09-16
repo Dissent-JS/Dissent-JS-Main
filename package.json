@@ -18,7 +18,7 @@
     "prebuild": "node write-components-to-html.js",
     "build-1": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images && yarn merge-scss ",
     "build-2": "yarn footer-header",
-    "build-3": "cp src/index.html.template dist/index.html.template && rimraf ./dist/components/**/*.html ./dist/views/**/*.html ./dist/index.html",
+    "build-3": "cp src/index.html.template dist/index.html.template && rimraf ./dist/components/**/*.html ./dist/views/**/*.html ./dist/index.html && cp src/404.html dist/404.html",
     "build-4": "yarn remove-template",
     "build-5": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/components/**/*.html ./dist/components/ ./dist/views/**/*.scss ./dist/views/**/*.css  ./src/views/**/*.template ./src/layout/**/*.template ./src/index.html.template",
     "build-6": "yarn minify-html",

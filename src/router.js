@@ -26,17 +26,14 @@ function userIsLoggedIn() {
 function router() {
     const path = getRouteFromUrl();
     console.log("Path", path);
-    if (!path) {
 
-        // Check if the user is logged in
-        if (userIsLoggedIn()) {
-            console.log("User is logged in");
-            window.location.hash = '#home';
-        } else {
-            loadView('/login/login.html');
-            console.log("User is not logged in");
-        }
-    } else if (path === "fail") {
+    // Handle root path - redirect to home
+    if (!path || path === '') {
+        navigateTo('home');
+        return;
+    }
+
+    if (path === "fail") {
         loadView('/fail/fail.html');
     } else if (path) {
         loadView(path + "/" + path + ".html");
@@ -63,10 +60,40 @@ function router() {
 
 
 function getRouteFromUrl() {
-    const hash = window.location.hash;
-    const route = hash.slice(1);
-    return route || '/';
+    // Use pathname for clean URLs
+    let path = window.location.pathname.slice(1); // Remove leading slash
+
+    // Fallback for GitHub Pages: check query string (from 404.html redirect)
+    if (!path && window.location.search.startsWith('/?')) {
+        path = window.location.search.slice(2); // Remove '/?'
+        // Clean up the URL
+        window.history.replaceState(null, null, '/' + path);
+    }
+
+    return path || ''; // Return empty string for root path
 }
 
+function navigateTo(path) {
+    // Use History API for clean URLs
+    window.history.pushState(null, null, `/${path}`);
+    router();
+}
+
+function handleLinkClick(event) {
+    // Intercept link clicks for SPA navigation
+    const link = event.target.closest('a[href]');
+    if (link && link.getAttribute('href').startsWith('/')) {
+        event.preventDefault();
+        const path = link.getAttribute('href').slice(1); // Remove leading slash
+        navigateTo(path);
+    }
+}
+
+// Initialize router
 router();
-window.addEventListener('hashchange', router);
+
+// Listen for browser back/forward buttons
+window.addEventListener('popstate', router);
+
+// Intercept link clicks for SPA navigation
+document.addEventListener('click', handleLinkClick);
