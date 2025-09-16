@@ -3,11 +3,13 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 
+const useTypeScript = fs.existsSync(path.join(__dirname, 'tsconfig.json'));
 
 module.exports = {
     mode: process.env.NODE_ENV || 'development',
-    entry: ['./src/index.js'],
+    entry: useTypeScript ? ['./src/index.ts'] : ['./src/index.js'],
     output: {
         library: 'Dissent-JS',
         libraryTarget: 'umd',
@@ -28,11 +30,12 @@ module.exports = {
         fallback: {
             process: require.resolve('process/browser'),
         },
+        extensions: useTypeScript ? ['.ts', '.js'] : ['.js'],
     },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: useTypeScript ? /\.([jt]s)$/ : /\.js$/,
                 exclude: /(__tests__|node_modules)/,
                 use: {
                     loader: 'babel-loader',
@@ -40,6 +43,11 @@ module.exports = {
                         presets: ['@babel/preset-env'],
                     },
                 },
+            },
+            useTypeScript && {
+                test: /\.ts$/,
+                exclude: /(__tests__|node_modules)/,
+                use: 'ts-loader',
             },
             {
                 test: /\.scss$/,
@@ -56,7 +64,7 @@ module.exports = {
                 exclude: /(__tests__|node_modules)/,
                 use: 'html-loader',
             },
-        ],
+        ].filter(Boolean),
     },
 
     plugins: [

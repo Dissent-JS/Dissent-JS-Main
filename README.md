@@ -10,6 +10,8 @@ Dissent.js is a JavaScript library that allows you to easily create reusable com
 2. Navigate to the root folder of the project in your terminal
 3. Run `yarn install` to install all the necessary dependencies
 
+During the installation process, you'll be prompted to choose between JavaScript (the original implementation) or TypeScript support. Choose based on your preference - TypeScript will add type checking and modern language features to your components.
+
 ## Usage
 
 ### Starting the local development server
@@ -32,7 +34,7 @@ This will create a `dist` folder in the root of your project that contains all t
 
 To create a new component, run the following command in your terminal:
 
-yarn create-component component-name
+`yarn create-component <component-name>`
 
 Replace `component-name` with the name of your new component. This will create a new folder in the `src/components` directory with the name of your component, and it will include an HTML file, a JavaScript file, and a Sass file. You can then import your new component into your project and use it like any other component, using:
 
@@ -56,7 +58,7 @@ and the view will be added to the navigation/menu in the header
 
 'yarn jest`
 
-although the intention is to make Dissent.js agnostic, Jest hass been added as a kickstarter to add testing. Other testing libraries will be considered later. In this version of Dissent.js, the tests are removed from the src folder and placed in the __test__ folder. This is allow us ease in adding libraries as we move on.
+although the intention is to make Dissent.js agnostic, Jest hass been added as a kickstarter to add testing. Other testing libraries will be considered later. In this version of Dissent.js, the tests are removed from the src folder and placed in the **test** folder. This is allow us ease in adding libraries as we move on.
 
 ## Conclusion
 
