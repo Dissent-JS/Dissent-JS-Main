@@ -28,7 +28,20 @@ To build the library for production, run the following command:
 
 yarn build
 
-This will create a `dist` folder in the root of your project that contains all the necessary files for deployment.
+This will create a `dist` folder in the root of your project that contains all the necessary files for deployment as a dynamic single-page application.
+
+### Building static HTML pages for SEO
+
+For better search engine optimization, you can build static HTML pages:
+
+yarn build-static
+
+This generates individual HTML files for each view (e.g., `home.html`, `about.html`) with content pre-rendered, making them SEO-friendly while maintaining the component architecture. Each page includes unique meta tags, full HTML content that's immediately available to search engines, and minified HTML for optimal performance.
+
+**Asset Behavior:**
+- When run independently: Creates minimal CSS and JS assets for basic styling and functionality
+- When run after `yarn build`: Uses the full compiled assets from the regular build for complete functionality
+- The static build always creates a clean dist folder with only the necessary files for deployment
 
 ### Creating a new component
 

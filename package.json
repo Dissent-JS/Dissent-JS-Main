@@ -23,6 +23,7 @@
     "build-5": "rimraf ./dist/components/**/*.js ./dist/components/**/*.scss ./dist/components/**/*.css ./dist/components/**/*.html ./dist/components/ ./dist/views/**/*.scss ./dist/views/**/*.css  ./src/views/**/*.template ./src/layout/**/*.template ./src/index.html.template",
     "build-6": "yarn minify-html",
     "build": "yarn build-1 && yarn build-2 && yarn build-3 && yarn build-4 && yarn build-5 && yarn build-6",
+    "build-static": "node build-static.js",
     "start": "webpack-dev-server --open --mode development",
     "postinstall": "node setup.js"
   },
@@ -41,7 +42,6 @@
     "inquirer": "^9.2.12",
     "jest": "^29.5.0",
     "mini-css-extract-plugin": "^2.7.2",
-    "node-sass": "^8.0.0",
     "rimraf": "^4.1.2",
     "sass": "^1.58.3",
     "sass-loader": "^13.2.0",
