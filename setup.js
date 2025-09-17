@@ -1,4 +1,4 @@
-const inquirer = require('inquirer');
+const { input, select } = require('@inquirer/prompts');
 const fs = require('fs');
 const path = require('path');
 const { execSync } = require('child_process');
@@ -7,20 +7,14 @@ async function setup() {
     console.log('Welcome to Dissent.js setup!');
     console.log('This will configure your project with your preferred language.\n');
 
-    const answers = await inquirer.prompt([
-        {
-            type: 'list',
-            name: 'language',
-            message: 'Choose your preferred language:',
-            choices: [
-                { name: 'JavaScript (as Dissent.js was intended)', value: 'js' },
-                { name: 'TypeScript', value: 'ts' }
-            ],
-            default: 'js'
-        }
-    ]);
-
-    const { language } = answers;
+    const language = await select({
+        message: 'Choose your preferred language:',
+        choices: [
+            { name: 'JavaScript (as Dissent.js was intended)', value: 'js' },
+            { name: 'TypeScript', value: 'ts' }
+        ],
+        default: 'js'
+    });
 
     if (language === 'ts') {
         console.log('\nSetting up TypeScript support...');

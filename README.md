@@ -10,7 +10,13 @@ Dissent.js is a JavaScript library that allows you to easily create reusable com
 2. Navigate to the root folder of the project in your terminal
 3. Run `yarn install` to install all the necessary dependencies
 
-During the installation process, you'll be prompted to choose between JavaScript (the original implementation) or TypeScript support. Choose based on your preference - TypeScript will add type checking and modern language features to your components.
+**Note:** If you see warnings about mixed package managers (package-lock.json and yarn.lock), you can safely remove `package-lock.json` as this project uses Yarn:
+
+```bash
+rm package-lock.json
+```
+
+**Note:** You may see some deprecation warnings during installation about `url.parse()` and `punycode`. These are from dependencies using older Node.js APIs but don't affect functionality.
 
 ## Usage
 
