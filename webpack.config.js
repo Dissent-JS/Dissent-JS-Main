@@ -22,6 +22,7 @@ module.exports = {
         compress: true,
         port: 3600,
         open: true,
+        historyApiFallback: true,
     },
     externals: {
         'jest-fetch-mock': 'fetchMock'
