@@ -221,32 +221,6 @@ console.log('Dissent.js static build loaded');
 
 // Make sure paths to components work in static build
 window.addEventListener('DOMContentLoaded', function() {
-    // Load content component if present
-    const contentElements = document.querySelectorAll('.content');
-    if (contentElements.length > 0) {
-        // Create and add a proper content component class
-        window.content = function(element) {
-            this.element = element;
-            
-            this.init = async function() {
-                // Any initialization logic for content component
-                console.log('Content component initialized');
-            };
-        };
-        
-        // Load the script
-        const contentScript = document.createElement('script');
-        contentScript.src = './components/content/content.js';
-        document.head.appendChild(contentScript);
-        
-        // Initialize the component
-        contentScript.onload = function() {
-            const contentInstances = document.querySelectorAll('.content');
-            Array.from(contentInstances).forEach(instance => {
-                new window.content(instance).init();
-            });
-        };
-    }
     
     // Create layout component classes
     // Footer class
@@ -470,40 +444,7 @@ function copyComponentFiles() {
             fs.mkdirSync(componentsDest, { recursive: true });
         }
 
-        // Copy the content component files specifically
-        const contentSrc = path.join(componentsSrc, 'content');
-        if (fs.existsSync(contentSrc)) {
-            const contentDest = path.join(componentsDest, 'content');
-            if (!fs.existsSync(contentDest)) {
-                fs.mkdirSync(contentDest, { recursive: true });
-            }
-
-            // Copy content.html and fix image paths
-            const contentHtml = path.join(contentSrc, 'content.html');
-            if (fs.existsSync(contentHtml)) {
-                let contentHtmlData = fs.readFileSync(contentHtml, 'utf8');
-                // Fix image paths from ../../images/ to ./images/
-                contentHtmlData = contentHtmlData.replace(/\.\.\/\.\.\/images\//g, './images/');
-                fs.writeFileSync(path.join(contentDest, 'content.html'), contentHtmlData);
-                console.log('Copied and fixed image paths in content.html');
-            }
-
-            // Copy content.js
-            const contentJs = path.join(contentSrc, 'content.js');
-            if (fs.existsSync(contentJs)) {
-                fs.copyFileSync(contentJs, path.join(contentDest, 'content.js'));
-            }
-
-            // Copy content.css - compile from SCSS instead
-            const contentScss = path.join(contentSrc, 'content.scss');
-            if (fs.existsSync(contentScss)) {
-                // Compile SCSS to CSS using sass
-                const result = sass.renderSync({ file: contentScss });
-                fs.writeFileSync(path.join(contentDest, 'content.css'), result.css);
-            }
-
-            console.log('Copied content component files');
-        }
+        console.log('Copied component files');
     }
 
     // Copy layout files (header and footer)
