@@ -1,18 +1,33 @@
-function loadView(view) {
-    fetch(`views/${view}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("View not found");
-            }
-            return response.text();
-        })
-        .then(html => {
-            document.querySelector('#view-container').innerHTML = html;
-        })
-        .catch(error => {
-            console.error(error);
-            loadView('404/404.html');
-        });
+function loadViewScript(path) {
+    const scriptId = `view-script-${path}`;
+
+    // Check if script is already loaded
+    const existingScript = document.getElementById(scriptId);
+    if (existingScript) {
+        // Script already loaded, just call the function
+        if (window[path]) {
+            window[path]();
+        } else {
+            console.error(`Function ${path} not found in already loaded script`);
+        }
+        return;
+    }
+
+    // Script not loaded, create and load it
+    const script = document.createElement('script');
+    script.id = scriptId;
+    script.src = `./views/${path}/${path}.js`;
+    script.onload = function () {
+        if (window[path]) {
+            window[path]();
+        } else {
+            console.error(`No function found for path ${path}`);
+        }
+    };
+    script.onerror = function () {
+        console.error(`Failed to load script for path ${path}`);
+    };
+    document.head.appendChild(script);
 }
 
 function userIsLoggedIn() {
@@ -38,19 +53,7 @@ function router() {
     } else if (path) {
         loadView(path + "/" + path + ".html");
         setTimeout(() => {
-            const currentPath = path;
-            const script = document.createElement('script');
-            script.src = `./views/${currentPath}/${currentPath}.js`;
-            script.onload = function () {
-
-                if (window[currentPath]) {
-                    window[currentPath]();
-                } else {
-                    console.error(`No function found for path ${currentPath}`);
-                }
-            };
-            document.head.appendChild(script);
-
+            loadViewScript(path);
         }, 300);
     } else {
         loadView('404/404.html');
