@@ -1,3 +1,20 @@
+function loadView(view) {
+    fetch(`views/${view}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("View not found");
+            }
+            return response.text();
+        })
+        .then(html => {
+            document.querySelector('#view-container').innerHTML = html;
+        })
+        .catch(error => {
+            console.error(error);
+            loadView('404/404.html');
+        });
+}
+
 function loadViewScript(path) {
     const scriptId = `view-script-${path}`;
 
@@ -79,6 +96,14 @@ function getRouteFromUrl() {
 function navigateTo(path) {
     // Use History API for clean URLs
     window.history.pushState(null, null, `/${path}`);
+
+    // Clear any existing content before routing to ensure clean initialization
+    const viewContainer = document.querySelector('#view-container');
+    if (viewContainer) {
+        viewContainer.innerHTML = '';
+    }
+
+    // Run the router to load the new view
     router();
 }
 

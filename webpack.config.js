@@ -74,8 +74,43 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
+                // Copy HTML files
                 { from: 'src/index.html', to: '.' },
                 { from: 'src/404.html', to: '.' },
+
+                // Copy component files
+                {
+                    from: 'src/components/**/*.html', to: ({ context, absoluteFilename }) => {
+                        return `components/${absoluteFilename.substring(context.length + 13)}`;
+                    }
+                },
+                {
+                    from: 'src/components/**/*.css', to: ({ context, absoluteFilename }) => {
+                        return `components/${absoluteFilename.substring(context.length + 13)}`;
+                    }
+                },
+                {
+                    from: 'src/components/**/*.js', to: ({ context, absoluteFilename }) => {
+                        return `components/${absoluteFilename.substring(context.length + 13)}`;
+                    }
+                },
+
+                // Copy view HTML files
+                {
+                    from: 'src/views/**/*.html', to: ({ context, absoluteFilename }) => {
+                        return `views/${absoluteFilename.substring(context.length + 10)}`;
+                    }
+                },
+
+                // Copy layout files
+                {
+                    from: 'src/layout/**/*.html', to: ({ context, absoluteFilename }) => {
+                        return `layout/${absoluteFilename.substring(context.length + 11)}`;
+                    }
+                },
+
+                // Copy images
+                { from: 'src/images', to: 'images' },
             ],
         }),
     ],

@@ -14,6 +14,11 @@ export default class footer {
     this.updateCopyrightYear();
   }
 
+  // Also expose the class globally for the static build
+  static initialize() {
+    window.footer = footer;
+  }
+
   updateCopyrightYear() {
     // Wait for a short moment to ensure the DOM is fully loaded
     setTimeout(() => {

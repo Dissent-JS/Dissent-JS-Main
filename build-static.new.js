@@ -73,17 +73,10 @@ function generateStaticPages() {
     // Inject header and footer into base template
     const headerPath = path.join(layoutDirectory, 'header', 'header.html');
     const footerPath = path.join(layoutDirectory, 'footer', 'footer.html');
-    const navPath = path.join(layoutDirectory, 'nav', 'nav.html');
 
     if (fs.existsSync(headerPath)) {
         const headerContent = fs.readFileSync(headerPath, 'utf8');
         baseTemplate = baseTemplate.replace(/<header class="header">[\s\S]*?<\/header>/, `<header class="header">${headerContent}</header>`);
-    }
-
-    // After injecting header, insert nav content into the nav div
-    if (fs.existsSync(navPath)) {
-        const navContent = fs.readFileSync(navPath, 'utf8');
-        baseTemplate = baseTemplate.replace(/<div id="nav"><\/div>/, `<div id="nav">${navContent}</div>`);
     }
 
     if (fs.existsSync(footerPath)) {
@@ -156,7 +149,7 @@ function generateStaticPages() {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url=home.html">
-    <title>ideal.ai - Agentic AI Solutions</title>
+    <title>Redirecting...</title>
 </head>
 <body>
     <p>Redirecting to <a href="home.html">home page</a>...</p>
@@ -223,227 +216,24 @@ window.addEventListener('DOMContentLoaded', function() {
     // Load content component if present
     const contentElements = document.querySelectorAll('.content');
     if (contentElements.length > 0) {
-        // Create and add a proper content component class
-        window.content = function(element) {
-            this.element = element;
-            
-            this.init = async function() {
-                // Any initialization logic for content component
-                console.log('Content component initialized');
-            };
-        };
-        
         // Load the script
         const contentScript = document.createElement('script');
         contentScript.src = './components/content/content.js';
         document.head.appendChild(contentScript);
-        
-        // Initialize the component
-        contentScript.onload = function() {
-            const contentInstances = document.querySelectorAll('.content');
-            Array.from(contentInstances).forEach(instance => {
-                new window.content(instance).init();
-            });
-        };
     }
     
-    // Create layout component classes
-    // Footer class
-    window.footer = function(element) {
-        this.element = element;
-        
-        this.init = async function() {
-            // Update copyright year
-            const yearElement = document.getElementById('copyright-year');
-            if (yearElement) {
-                yearElement.textContent = new Date().getFullYear();
-            }
-            console.log('Footer component initialized');
-        };
-    };
+    // Always load layout scripts
+    const headerScript = document.createElement('script');
+    headerScript.src = './layout/header/header.js';
+    document.head.appendChild(headerScript);
     
-    // Header class
-    window.header = class {
-        constructor(element) {
-            this.element = element;
-            this.scrollThreshold = 50;
-            this.isScrolling = false;
-        }
-        
-        async init() {
-            this.initScrollEffect();
-        }
-        
-        initScrollEffect() {
-            // Wait a moment to ensure DOM is loaded
-            setTimeout(() => {
-                // Get the fixed header element
-                this.fixedHeader = document.querySelector('.fixed-header');
-                
-                if (this.fixedHeader) {
-                    // Add initial transparent background
-                    this.fixedHeader.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-                    this.fixedHeader.style.transition = 'background-color 0.3s ease';
-                    
-                    // Add scroll event listener
-                    window.addEventListener('scroll', this.handleScroll.bind(this));
-                    
-                    // Call once to set initial state
-                    this.handleScroll();
-                }
-            }, 100);
-        }
-        
-        handleScroll() {
-            if (!this.isScrolling) {
-                window.requestAnimationFrame(() => {
-                    const scrollPosition = window.scrollY;
-                    
-                    if (scrollPosition > this.scrollThreshold) {
-                        // Calculate opacity based on scroll position (max 0.9)
-                        const opacity = Math.min(0.9, (scrollPosition - this.scrollThreshold) / 150);
-                        // Use primary color #232340 instead of black
-                        this.fixedHeader.style.backgroundColor = 'rgba(35, 35, 64, ' + opacity + ')';
-                    } else {
-                        // Reset to transparent if at top
-                        this.fixedHeader.style.backgroundColor = 'rgba(35, 35, 64, 0)';
-                    }
-                    
-                    this.isScrolling = false;
-                });
-                
-                this.isScrolling = true;
-            }
-        }
-    };
+    const footerScript = document.createElement('script');
+    footerScript.src = './layout/footer/footer.js';
+    document.head.appendChild(footerScript);
     
-    // Nav class
-    window.nav = function(element) {
-        this.element = element;
-        
-        this.init = async function() {
-            // Highlight active link
-            const path = window.location.pathname.slice(1) || 'home';
-            const navLinks = this.element.querySelectorAll('nav a');
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && href.replace('/', '') === path) {
-                    link.classList.add('active');
-                }
-            });
-            console.log('Nav component initialized');
-        };
-    };
-    
-    // Load and initialize layout scripts
-    function loadLayoutScript(name) {
-        const script = document.createElement('script');
-        script.src = './layout/' + name + '/' + name + '.js';
-        script.onload = function() {
-            // First check if the component exports a static initialize method to expose the class globally
-            if (typeof window[name] !== 'function') {
-                // Try to access the default export and expose it globally
-                try {
-                    // For module-exported components, make them available on window
-                    const script = document.createElement('script');
-                    const selector = '.' + name;
-                    script.textContent = '\\n' +
-                        'import(\\'./layout/' + name + '/' + name + '.js\\').then(module => {\\n' +
-                        '    window.' + name + ' = module.default;\\n' +
-                        '    if (module.default.initialize) {\\n' +
-                        '        module.default.initialize();\\n' +
-                        '    }\\n' +
-                        '    // Initialize all instances\\n' +
-                        '    const instances = document.querySelectorAll(\\"' + selector + '\\");\\n' +
-                        '    Array.from(instances).forEach(instance => {\\n' +
-                        '        new window.' + name + '(instance).init();\\n' +
-                        '    });\\n' +
-                        '});\\n';
-                    script.type = 'module';
-                    document.head.appendChild(script);
-                } catch (e) {
-                                    console.warn('Could not load ' + name + ' as a module: ' + e.message);
-                }
-            } else {
-                // Already defined globally, just initialize
-                const instances = document.querySelectorAll('.' + name);
-                Array.from(instances).forEach(instance => {
-                    new window[name](instance).init();
-                });
-            }
-        };
-        document.head.appendChild(script);
-        return script;
-    }
-    
-    // Set up classes and initialize methods for static build
-    window.footer = class {
-        constructor(element) {
-            this.element = element;
-        }
-        
-        async init() {
-            this.updateCopyrightYear();
-        }
-        
-        updateCopyrightYear() {
-            const yearElement = document.getElementById('copyright-year');
-            if (yearElement) {
-                const currentYear = new Date().getFullYear();
-                yearElement.textContent = currentYear;
-            }
-        }
-    };
-    
-    window.nav = class {
-        constructor(element) {
-            this.element = element;
-        }
-        
-        async init() {
-            this.initializeNavLinks();
-        }
-        
-        initializeNavLinks() {
-            // Highlight the active link based on current path
-            const path = window.location.pathname.slice(1) || 'home';
-            const navLinks = this.element.querySelectorAll('nav a');
-            
-            navLinks.forEach(link => {
-                const href = link.getAttribute('href');
-                if (href && href.replace('/', '') === path) {
-                    link.classList.add('active');
-                }
-            });
-        }
-    };
-
-    
-    // Initialize all layout components
-    document.addEventListener('DOMContentLoaded', () => {
-        // Initialize header
-        const headerInstances = document.querySelectorAll('.header');
-        Array.from(headerInstances).forEach(instance => {
-            new window.header(instance).init();
-        });
-        
-        // Initialize footer
-        const footerInstances = document.querySelectorAll('.footer');
-        Array.from(footerInstances).forEach(instance => {
-            new window.footer(instance).init();
-        });
-        
-        // Initialize nav
-        const navElements = document.querySelectorAll('#nav');
-        Array.from(navElements).forEach(element => {
-            new window.nav(element).init();
-        });
-        
-        // Try to load the layout scripts for additional functionality
-        loadLayoutScript('header');
-        loadLayoutScript('footer');
-        loadLayoutScript('nav');
-    });
+    const navScript = document.createElement('script');
+    navScript.src = './layout/nav/nav.js';
+    document.head.appendChild(navScript);
 });
 `;
                 fs.writeFileSync(destPath, minimalJs.trim());
@@ -558,40 +348,16 @@ function copyLayoutComponent(componentName, layoutSrc, layoutDest) {
             fs.copyFileSync(jsFile, path.join(componentDest, `${componentName}.js`));
         }
 
-        // Process SCSS to CSS
-        const scssFile = path.join(componentSrc, `${componentName}.scss`);
-        if (fs.existsSync(scssFile)) {
-            try {
-                // Try to use sass compiler if available
-                const sass = require('sass');
-                const result = sass.renderSync({
-                    file: scssFile,
-                    includePaths: [path.join(__dirname, 'src/styles')]
-                });
-
-                // Write the compiled CSS
-                fs.writeFileSync(
-                    path.join(componentDest, `${componentName}.css`),
-                    result.css.toString()
-                );
-                console.log(`Compiled SCSS for ${componentName}`);
-            } catch (error) {
-                console.log(`Could not compile SCSS for ${componentName}, falling back to copying: ${error.message}`);
-
-                // If sass compiler not available, fall back to copying
-                const cssFile = path.join(componentSrc, `${componentName}.css`);
-                if (fs.existsSync(cssFile)) {
-                    fs.copyFileSync(cssFile, path.join(componentDest, `${componentName}.css`));
-                } else {
-                    // Last resort: just copy the SCSS as CSS
-                    fs.copyFileSync(scssFile, path.join(componentDest, `${componentName}.css`));
-                }
-            }
+        // Copy CSS or SCSS
+        const cssFile = path.join(componentSrc, `${componentName}.css`);
+        if (fs.existsSync(cssFile)) {
+            fs.copyFileSync(cssFile, path.join(componentDest, `${componentName}.css`));
         } else {
-            // If no SCSS, try copying existing CSS
-            const cssFile = path.join(componentSrc, `${componentName}.css`);
-            if (fs.existsSync(cssFile)) {
-                fs.copyFileSync(cssFile, path.join(componentDest, `${componentName}.css`));
+            // If CSS doesn't exist, try to copy and rename the SCSS file
+            const scssFile = path.join(componentSrc, `${componentName}.scss`);
+            if (fs.existsSync(scssFile)) {
+                // Basic SCSS conversion - Just copy as CSS for now
+                fs.copyFileSync(scssFile, path.join(componentDest, `${componentName}.css`));
             }
         }
     }

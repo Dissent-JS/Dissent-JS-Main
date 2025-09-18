@@ -19,6 +19,11 @@ nav {
           color: black;
           text-decoration: none;
         }
+        &.active {
+          background-color: white;
+          color: black;
+          font-weight: bold;
+        }
       }
     }
   }

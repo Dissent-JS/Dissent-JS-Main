@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 
 function processHeaderAndFooter() {
-    const headerFile = './dist/layout/header/header.html.template';
-    const footerFile = './dist/layout/footer/footer.html.template';
+    const headerFile = './src/layout/header/header.html.template';
+    const footerFile = './src/layout/footer/footer.html.template';
     const indexPath = path.join(__dirname, 'src/index.html');
     const indexContent = fs.readFileSync(indexPath, 'utf8');
     const headerContent = fs.readFileSync(headerFile, 'utf8');
