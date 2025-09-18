@@ -1,18 +1,23 @@
 @import "../../styles/variables.scss";
 nav {
+  float: right;
   ul {
-    padding: 0;
+    padding: 10px 0 0;
+    margin: 0;
     li {
       display: inline-block;
       margin: 0 1rem 0 0;
       a {
         text-decoration: none;
-        border: 2px solid $slategrey;
+        border: 2px solid white;
+        color: white;
         padding: 0.5rem;
         border-radius: 5px;
+        transition: all 0.3s ease;
         &:hover {
-          background-color: $slategrey;
-          text-decoration: underline;
+          background-color: white;
+          color: black;
+          text-decoration: none;
         }
       }
     }

@@ -1,5 +1,16 @@
 function home() {
     console.log('Home');
+    // Initialize components
+    import('../../components/content/content.js')
+        .then(module => {
+            const Content = module.default;
+            const contentElement = document.querySelector('.content');
+            if (contentElement) {
+                const contentComponent = new Content(contentElement);
+                contentComponent.init();
+            }
+        })
+        .catch(error => console.error('Error loading content component:', error));
 }
 
 try {

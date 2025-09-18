@@ -6,3 +6,18 @@ body {
   line-height: $line-height;
   color: $primary-color;
 }
+
+h1 {
+  color: white;
+  float: left;
+  font-family: "Lexend Deca", sans-serif;
+  margin: 0;
+}
+
+h2 {
+  font-family: "Lexend Deca", sans-serif;
+  font-weight: 700;
+  font-size: 50px;
+  line-height: 64px;
+  letter-spacing: 0%;
+}

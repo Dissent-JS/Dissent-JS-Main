@@ -1,7 +1,7 @@
 @import "../../styles/variables.scss";
 
 .footer {
-  background-color: $dark-blue;
+  background-color: $primary-color;
   padding: 20px;
   position: relative;
   width: 100%;
@@ -10,6 +10,16 @@
   flex-direction: column;
   justify-content: flex-end;
   flex-grow: 2;
+
+  h2,
+  h3 {
+    margin-top: 0;
+  }
+
+  h2,
+  p {
+    color: white;
+  }
 }
 
 .footer-container {

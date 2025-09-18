@@ -21,7 +21,6 @@ html,
 body {
   background-color: $light-grey;
   color: $primary-color;
-  font-family: "Arial";
   margin: 0;
   padding: 0;
   display: flex;
@@ -35,7 +34,6 @@ main {
 }
 
 section {
-  width: 50%;
   margin: 0 auto;
   flex: 1 0 auto;
 }
@@ -117,10 +115,6 @@ details p {
 
 summary {
   margin-bottom: 10px;
-}
-
-a {
-  color: black;
 }
 
 /**
