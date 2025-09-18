@@ -1,6 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const { minify } = require('html-minifier-terser');
+const sass = require('sass');
 
 const viewsDirectory = './src/views/';
 const layoutDirectory = './src/layout/';
@@ -493,17 +494,12 @@ function copyComponentFiles() {
                 fs.copyFileSync(contentJs, path.join(contentDest, 'content.js'));
             }
 
-            // Copy content.css
-            const contentCss = path.join(contentSrc, 'content.css');
-            if (fs.existsSync(contentCss)) {
-                fs.copyFileSync(contentCss, path.join(contentDest, 'content.css'));
-            } else {
-                // If CSS doesn't exist, try to copy and rename the SCSS file
-                const contentScss = path.join(contentSrc, 'content.scss');
-                if (fs.existsSync(contentScss)) {
-                    // Basic SCSS conversion - Just copy as CSS for now
-                    fs.copyFileSync(contentScss, path.join(contentDest, 'content.css'));
-                }
+            // Copy content.css - compile from SCSS instead
+            const contentScss = path.join(contentSrc, 'content.scss');
+            if (fs.existsSync(contentScss)) {
+                // Compile SCSS to CSS using sass
+                const result = sass.renderSync({ file: contentScss });
+                fs.writeFileSync(path.join(contentDest, 'content.css'), result.css);
             }
 
             console.log('Copied content component files');

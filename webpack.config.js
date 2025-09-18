@@ -85,11 +85,6 @@ module.exports = {
                     }
                 },
                 {
-                    from: 'src/components/**/*.css', to: ({ context, absoluteFilename }) => {
-                        return `components/${absoluteFilename.substring(context.length + 13)}`;
-                    }
-                },
-                {
                     from: 'src/components/**/*.js', to: ({ context, absoluteFilename }) => {
                         return `components/${absoluteFilename.substring(context.length + 13)}`;
                     }
