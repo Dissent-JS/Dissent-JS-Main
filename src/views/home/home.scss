@@ -8,6 +8,14 @@
   }
 }
 
+a {
+  text-decoration: none;
+}
+
+.link-underline {
+  border-bottom: 1px solid $primary-color;
+}
+
 .content {
   width: 100%;
   max-width: 1400px;
@@ -47,7 +55,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: darken($primary-color, 10%);
+    color: darken($primary-color, 10%);
   }
 }
 

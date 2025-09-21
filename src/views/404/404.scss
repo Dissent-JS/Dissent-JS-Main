@@ -1,6 +1,15 @@
 @import "../../styles/mixin.scss";
 
-#ty {
+.notfound {
   font-weight: bold;
   margin-bottom: 20px;
+  width: 100%;
+  max-width: 1400px;
+
+  h1 {
+    float: none;
+    font-size: 10rem;
+    margin: 0;
+    color: $primary-color;
+  }
 }

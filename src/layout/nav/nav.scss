@@ -15,7 +15,8 @@ nav {
         border-radius: 5px;
         transition: all 0.3s ease;
         &:hover {
-          background-color: white;
+          background-color: $orange;
+          border-color: $orange;
           color: black;
           text-decoration: none;
         }
