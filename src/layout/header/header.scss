@@ -1,9 +1,50 @@
 @import "../../styles/variables.scss";
 
 .header {
-  background-color: $light-grey;
   padding: 20px;
   border-bottom: 4px solid black;
   width: 100%;
-  height: 200px;
+  height: 120px;
+}
+
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px 20px 26px;
+  z-index: 1000;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+  &.scrolled {
+    box-shadow: 0 2px 10px rgba($primary-color, 0.3);
+  }
+
+  @media screen and (min-width: 768px) {
+    padding: 15px 20px 6px;
+  }
+}
+
+.header-content {
+  color: white;
+  width: 100%;
+  max-width: 1400px;
+  margin: 20px auto 0;
+
+  h1 {
+    color: white;
+    float: left;
+    margin: 0;
+    text-shadow: 0 2px 4px rgba($primary-color, 0.5);
+    width: 300px;
+  }
+
+  h2 {
+    font-size: 50px;
+    line-height: 64px;
+  }
+}
+
+.header-logo-nav {
+  margin: 0 auto;
 }

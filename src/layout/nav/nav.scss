@@ -1,20 +1,44 @@
 @import "../../styles/variables.scss";
 nav {
+  float: inline-start;
+  width: 100%;
   ul {
-    padding: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0 0;
+    margin: 0;
+    width: 100%;
     li {
       display: inline-block;
-      margin: 0 1rem 0 0;
+      margin: 0;
       a {
         text-decoration: none;
-        border: 2px solid $slategrey;
+        border: 2px solid white;
+        color: white;
         padding: 0.5rem;
         border-radius: 5px;
+        transition: all 0.3s ease;
         &:hover {
-          background-color: $slategrey;
-          text-decoration: underline;
+          color: black;
+          text-decoration: none;
+        }
+        &.active {
+          background-color: white;
+          color: black;
+          font-weight: bold;
         }
       }
+      @media (min-width: 768px) {
+        margin: 0 1rem 0 0;
+      }
     }
+    @media (min-width: 768px) {
+      float: right;
+      width: auto;
+    }
+  }
+  @media (min-width: 768px) {
+    float: right;
+    width: auto;
   }
 }

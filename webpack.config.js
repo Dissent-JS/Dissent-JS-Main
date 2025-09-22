@@ -3,11 +3,13 @@ const TerserWebpackPlugin = require('terser-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const webpack = require('webpack');
 const path = require('path');
+const fs = require('fs');
 
+const useTypeScript = fs.existsSync(path.join(__dirname, 'tsconfig.json'));
 
 module.exports = {
     mode: process.env.NODE_ENV || 'development',
-    entry: ['./src/index.js'],
+    entry: useTypeScript ? ['./src/index.ts'] : ['./src/index.js'],
     output: {
         library: 'Dissent-JS',
         libraryTarget: 'umd',
@@ -20,6 +22,7 @@ module.exports = {
         compress: true,
         port: 3600,
         open: true,
+        historyApiFallback: true,
     },
     externals: {
         'jest-fetch-mock': 'fetchMock'
@@ -28,11 +31,12 @@ module.exports = {
         fallback: {
             process: require.resolve('process/browser'),
         },
+        extensions: useTypeScript ? ['.ts', '.js'] : ['.js'],
     },
     module: {
         rules: [
             {
-                test: /\.js$/,
+                test: useTypeScript ? /\.([jt]s)$/ : /\.js$/,
                 exclude: /(__tests__|node_modules)/,
                 use: {
                     loader: 'babel-loader',
@@ -40,6 +44,11 @@ module.exports = {
                         presets: ['@babel/preset-env'],
                     },
                 },
+            },
+            useTypeScript && {
+                test: /\.ts$/,
+                exclude: /(__tests__|node_modules)/,
+                use: 'ts-loader',
             },
             {
                 test: /\.scss$/,
@@ -56,7 +65,7 @@ module.exports = {
                 exclude: /(__tests__|node_modules)/,
                 use: 'html-loader',
             },
-        ],
+        ].filter(Boolean),
     },
 
     plugins: [
@@ -65,7 +74,38 @@ module.exports = {
         }),
         new CopyWebpackPlugin({
             patterns: [
+                // Copy HTML files
                 { from: 'src/index.html', to: '.' },
+                { from: 'src/404.html', to: '.' },
+
+                // Copy component files
+                {
+                    from: 'src/components/**/*.html', to: ({ context, absoluteFilename }) => {
+                        return `components/${absoluteFilename.substring(context.length + 13)}`;
+                    }
+                },
+                {
+                    from: 'src/components/**/*.js', to: ({ context, absoluteFilename }) => {
+                        return `components/${absoluteFilename.substring(context.length + 13)}`;
+                    }
+                },
+
+                // Copy view HTML files
+                {
+                    from: 'src/views/**/*.html', to: ({ context, absoluteFilename }) => {
+                        return `views/${absoluteFilename.substring(context.length + 10)}`;
+                    }
+                },
+
+                // Copy layout files
+                {
+                    from: 'src/layout/**/*.html', to: ({ context, absoluteFilename }) => {
+                        return `layout/${absoluteFilename.substring(context.length + 11)}`;
+                    }
+                },
+
+                // Copy images
+                { from: 'src/images', to: 'images' },
             ],
         }),
     ],

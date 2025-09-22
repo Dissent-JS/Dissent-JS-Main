@@ -19,7 +19,7 @@ html {
 
 html,
 body {
-  background-color: $light-grey;
+  background-color: $slategrey;
   color: $primary-color;
   font-family: "Arial";
   margin: 0;
@@ -35,8 +35,8 @@ main {
 }
 
 section {
-  width: 50%;
   margin: 0 auto;
+  max-width: 1400px;
   flex: 1 0 auto;
 }
 
@@ -119,10 +119,6 @@ summary {
   margin-bottom: 10px;
 }
 
-a {
-  color: black;
-}
-
 /**
  * Form, form fields
  *
@@ -154,7 +150,6 @@ textarea {
 }
 
 button {
-  margin: 2em 0;
   padding: 1em 4em;
   display: block;
 }

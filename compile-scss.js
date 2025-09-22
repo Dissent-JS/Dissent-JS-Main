@@ -1,6 +1,6 @@
 const fs = require('fs');
 const path = require('path');
-const sass = require('node-sass');
+const sass = require('sass');
 const glob = require('glob');
 const CleanCSS = require('clean-css');
 
@@ -18,7 +18,7 @@ const files = foldersToSearch.flatMap((pattern) => glob.sync(pattern));
 const cssContent = files
   .map((filePath) => {
     const result = sass.renderSync({ file: filePath });
-    return result.css.toString();
+    return result.css;
   })
   .join('\n');
 

@@ -7,6 +7,9 @@ if (!componentName) {
   process.exit(1)
 }
 
+const useTypeScript = fs.existsSync(path.join(__dirname, 'tsconfig.json'));
+const ext = useTypeScript ? 'ts' : 'js';
+
 // Create the component directory
 const componentDir = path.join(__dirname, 'src', 'components', componentName)
 fs.mkdirSync(componentDir)
@@ -28,15 +31,15 @@ const scssContent = `@import '../../styles/mixin.scss';  // remove if not needed
 const scssPath = path.join(componentDir, `${componentName}.scss`)
 fs.writeFileSync(scssPath, scssContent)
 
-// Create the JS file
+// Create the JS/TS file
 const jsContent = `import './${componentName}.scss'
 
 export default class ${componentName} {
-  constructor(element) {
+  constructor(element${useTypeScript ? ': HTMLElement' : ''}) {
     this.element = element
   }
 
-  async init() {
+  async init()${useTypeScript ? ': Promise<void>' : ''} {
     if (process.env.NODE_ENV !== 'production') {
       const response = await fetch('components/${componentName}/${componentName}.html');
       const ${componentName}html = await response.text();
@@ -46,7 +49,7 @@ export default class ${componentName} {
   }
 }
 `
-const jsPath = path.join(componentDir, `${componentName}.js`)
+const jsPath = path.join(componentDir, `${componentName}.${ext}`)
 fs.writeFileSync(jsPath, jsContent)
 
 console.log(`Component '${componentName}' created successfully`)
