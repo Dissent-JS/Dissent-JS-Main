@@ -52,7 +52,7 @@ export default class header {
 
         if (scrollPosition > this.scrollThreshold) {
           // Calculate opacity based on scroll position (max 0.9)
-          const opacity = Math.min(0.9, (scrollPosition - this.scrollThreshold) / 150);
+          const opacity = Math.min(0.97, (scrollPosition - this.scrollThreshold) / 150);
           // Use primary color #232340 instead of black
           this.fixedHeader.style.backgroundColor = `rgba(35, 35, 64, ${opacity})`;
         } else {

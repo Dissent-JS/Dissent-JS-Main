@@ -1,12 +1,16 @@
 @import "../../styles/variables.scss";
 nav {
-  float: right;
+  float: inline-start;
+  width: 100%;
   ul {
+    display: flex;
+    justify-content: space-between;
     padding: 10px 0 0;
     margin: 0;
+    width: 100%;
     li {
       display: inline-block;
-      margin: 0 1rem 0 0;
+      margin: 0;
       a {
         text-decoration: none;
         border: 2px solid white;
@@ -26,6 +30,17 @@ nav {
           font-weight: bold;
         }
       }
+      @media (min-width: 768px) {
+        margin: 0 1rem 0 0;
+      }
     }
+    @media (min-width: 768px) {
+      float: right;
+      width: auto;
+    }
+  }
+  @media (min-width: 768px) {
+    float: right;
+    width: auto;
   }
 }
