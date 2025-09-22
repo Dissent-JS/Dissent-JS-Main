@@ -81,7 +81,7 @@ For clean URL routing to work, your server must serve `index.html` for all route
 
 For better search engine optimization, you can build static HTML pages:
 
-yarn build-static
+`yarn build-static`
 
 This generates individual HTML files for each view (e.g., `home.html`, `about.html`) with content pre-rendered, making them SEO-friendly while maintaining the component architecture. Each page includes unique meta tags, full HTML content that's immediately available to search engines, and minified HTML for optimal performance.
 

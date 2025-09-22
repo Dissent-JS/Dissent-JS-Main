@@ -22,7 +22,13 @@ function loadViewScript(path) {
     const existingScript = document.getElementById(scriptId);
     if (existingScript) {
         // Script already loaded, just call the function
-        if (window[path]) {
+        if (path === '404') {
+            if (window.notfound) {
+                window.notfound();
+            } else {
+                console.error(`Function notfound not found in already loaded script`);
+            }
+        } else if (window[path]) {
             window[path]();
         } else {
             console.error(`Function ${path} not found in already loaded script`);
@@ -35,7 +41,14 @@ function loadViewScript(path) {
     script.id = scriptId;
     script.src = `./views/${path}/${path}.js`;
     script.onload = function () {
-        if (window[path]) {
+        // Special handling for 404 since "404" is not a valid function name
+        if (path === '404') {
+            if (window.notfound) {
+                window.notfound();
+            } else {
+                console.error(`Function notfound not found for path ${path}`);
+            }
+        } else if (window[path]) {
             window[path]();
         } else {
             console.error(`No function found for path ${path}`);
