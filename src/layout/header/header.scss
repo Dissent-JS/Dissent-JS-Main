@@ -1,13 +1,10 @@
 @import "../../styles/variables.scss";
 
 .header {
-  background-image: url("../../images/hero.png");
-  background-size: cover;
-  background-position: center;
   padding: 20px;
   border-bottom: 4px solid black;
   width: 100%;
-  height: 600px;
+  height: 120px;
 }
 
 .fixed-header {
@@ -28,17 +25,18 @@
   }
 }
 
-.header-content,
-.header-logo-nav {
+.header-content {
   color: white;
   width: 100%;
   max-width: 1400px;
-  margin: 130px auto 0;
+  margin: 20px auto 0;
 
   h1 {
     color: white;
+    float: left;
+    margin: 0;
     text-shadow: 0 2px 4px rgba($primary-color, 0.5);
-    margin: 0 0 10px 0;
+    width: 300px;
   }
 
   h2 {

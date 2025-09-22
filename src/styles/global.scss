@@ -19,8 +19,9 @@ html {
 
 html,
 body {
-  background-color: $light-grey;
+  background-color: $slategrey;
   color: $primary-color;
+  font-family: "Arial";
   margin: 0;
   padding: 0;
   display: flex;
@@ -35,6 +36,7 @@ main {
 
 section {
   margin: 0 auto;
+  max-width: 1400px;
   flex: 1 0 auto;
 }
 

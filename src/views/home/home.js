@@ -1,7 +1,5 @@
 function home() {
-    console.log('Home page initialized');
-
-    // Content is now directly embedded in the HTML, no component initialization needed
+    console.log('Home');
 }
 
 try {
