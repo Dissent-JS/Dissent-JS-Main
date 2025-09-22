@@ -131,11 +131,6 @@ function generateStaticPages() {
             // Add component CSS links to the head for all views
             let cssLinks = '';
 
-            // Add content CSS for the home page
-            if (viewName === 'home') {
-                cssLinks += '<link rel="stylesheet" href="./components/content/content.css">';
-            }
-
             // Always add layout CSS files (header, footer, nav)
             cssLinks += '<link rel="stylesheet" href="./layout/header/header.css">';
             cssLinks += '<link rel="stylesheet" href="./layout/footer/footer.css">';
