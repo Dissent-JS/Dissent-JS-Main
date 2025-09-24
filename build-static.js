@@ -11,27 +11,27 @@ const distDirectory = './dist/';
 // Meta tags configuration for each view
 const viewMeta = {
     'home': {
-        title: 'Home - ideal.ai',
-        description: 'ideal.ai delivers seamless Agentic AI solutions that streamline processes, reimagine customer service, and automate workflows. We combine cutting-edge AI with a human-first approach to help businesses of all sizes work smarter, faster, and with greater impact.'
+        title: 'Home - Dissent.js',
+        description: 'Welcome to Dissent.js - A lightweight JavaScript framework for building modern web applications'
     },
     'about': {
-        title: 'About - ideal.ai',
-        description: 'Learn about ideal.ai - We\'re a team of AI and business experts with a background in the world\'s top consultancies, bringing expertise to businesses of every size with cutting-edge AI solutions.'
+        title: 'About - Dissent.js',
+        description: 'Learn about Dissent.js - We\'re a team of AI and business experts with a background in the world\'s top consultancies, bringing expertise to businesses of every size with cutting-edge AI solutions.'
     },
     'contact': {
-        title: 'Contact - ideal.ai',
-        description: 'Get in touch with ideal.ai. We specialize in estate agents and provide Agentic AI solutions across industries to help your business thrive.'
+        title: 'Contact - Dissent.js',
+        description: 'Get in touch with Dissent.js. We specialize in estate agents and provide Agentic AI solutions across industries to help your business thrive.'
     },
     '404': {
-        title: 'Page Not Found - ideal.ai',
-        description: 'The page you are looking for could not be found on ideal.ai'
+        title: 'Page Not Found - Dissent.js',
+        description: 'The page you are looking for could not be found on Dissent.js'
     }
 };
 
 function getDefaultMeta() {
     return {
-        title: 'ideal.ai - Agentic AI Solutions',
-        description: 'ideal.ai delivers seamless Agentic AI solutions that streamline processes, reimagine customer service, and automate workflows. We combine cutting-edge AI with a human-first approach to help businesses of all sizes work smarter, faster, and with greater impact.'
+        title: 'Dissent.js - Agentic AI Solutions',
+        description: 'Dissent.js delivers seamless Agentic AI solutions that streamline processes, reimagine customer service, and automate workflows. We combine cutting-edge AI with a human-first approach to help businesses of all sizes work smarter, faster, and with greater impact.'
     };
 }
 
@@ -214,7 +214,7 @@ function generateStaticPages() {
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="refresh" content="0; url=index.html">
-    <title>ideal.ai - Agentic AI Solutions</title>
+    <title>Dissent.js - Redirecting</title>
 </head>
 <body>
     <p>Redirecting to <a href="index.html">home page</a>...</p>
