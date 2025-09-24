@@ -131,10 +131,13 @@ function handleLinkClick(event) {
 }
 
 // Initialize router
-router();
+// Only initialize SPA routing if not in static build context
+if (!document.querySelector('meta[name="static-build"]')) {
+    router();
 
-// Listen for browser back/forward buttons
-window.addEventListener('popstate', router);
+    // Listen for browser back/forward buttons
+    window.addEventListener('popstate', router);
 
-// Intercept link clicks for SPA navigation
-document.addEventListener('click', handleLinkClick);
+    // Intercept link clicks for SPA navigation
+    document.addEventListener('click', handleLinkClick);
+}
