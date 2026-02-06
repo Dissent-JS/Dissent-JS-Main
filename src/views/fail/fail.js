@@ -3,4 +3,7 @@ function fail() {
     console.log('Login failed');
 }
 
-window.fail = fail;
+/* istanbul ignore else */
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { fail };
+}

@@ -1,5 +1,6 @@
 module.exports = {
     testEnvironment: 'jsdom',
+    setupFiles: ['<rootDir>/__tests__/setupTests.js'],
     testMatch: [
         '<rootDir>/__tests__/components/**/*.test.js',
         '<rootDir>/__tests__/layouts/**/*.test.js',

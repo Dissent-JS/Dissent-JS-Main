@@ -7,8 +7,12 @@ services:
     depends_on:
       - db
     environment:
-      - MONGO_URI=mongodb://db:27027/tasks
+      - MONGO_URI=mongodb://appuser:${MONGO_APP_PASSWORD}@db:27017/tasks?authSource=admin
   db:
-    image: "mongo:latest"
-    ports:
-      - "27023:27017"
+    image: "mongo:7.0"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=appuser
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_APP_PASSWORD}
+    # Do not expose MongoDB port to host — access via internal Docker network only
+    # ports:
+    #   - "27023:27017"

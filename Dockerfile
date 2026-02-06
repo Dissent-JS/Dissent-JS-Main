@@ -8,6 +8,9 @@ RUN npm install
 
 COPY . .
 
+# Run as non-root user for security
+USER node
+
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["yarn", "start"]

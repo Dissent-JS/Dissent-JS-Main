@@ -1,4 +1,19 @@
+// Whitelist of allowed view names to prevent path traversal and script injection
+const ALLOWED_VIEWS = ['home', 'about', 'contact', 'login', 'fail', '404'];
+
+function isValidViewName(name) {
+    return ALLOWED_VIEWS.includes(name);
+}
+
 function loadView(view) {
+    // Extract the view name from the path for validation
+    const viewName = view.split('/')[0];
+    if (!isValidViewName(viewName)) {
+        console.error(`Invalid view name: ${viewName}`);
+        loadView('404/404.html');
+        return;
+    }
+
     fetch(`views/${view}`)
         .then(response => {
             if (!response.ok) {
@@ -16,6 +31,12 @@ function loadView(view) {
 }
 
 function loadViewScript(path) {
+    // Validate against whitelist before creating script element
+    if (!isValidViewName(path)) {
+        console.error(`Invalid view path: ${path}`);
+        return;
+    }
+
     const scriptId = `view-script-${path}`;
 
     // Check if script is already loaded
@@ -82,9 +103,19 @@ function router() {
         loadView('/fail/fail.html');
     } else if (path) {
         loadView(path + "/" + path + ".html");
-        setTimeout(() => {
-            loadViewScript(path);
-        }, 300);
+        // Wait for view HTML to be injected, then load scripts and re-init components
+        const waitForView = setInterval(() => {
+            const container = document.querySelector('#view-container');
+            if (container && container.innerHTML.trim() !== '') {
+                clearInterval(waitForView);
+                loadViewScript(path);
+                if (window.initiate) {
+                    window.initiate();
+                }
+            }
+        }, 50);
+        // Safety timeout to prevent infinite polling
+        setTimeout(() => clearInterval(waitForView), 5000);
     } else {
         loadView('404/404.html');
     }

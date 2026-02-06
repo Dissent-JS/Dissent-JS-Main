@@ -1,6 +1,7 @@
 import dataBinding from '../../src/components/dataBinding/dataBinding';
 
 // Mock server for fetching the HTML content
+const originalFetch = global.fetch;
 global.fetch = jest.fn(() =>
     Promise.resolve({
         text: () => Promise.resolve(`
@@ -24,6 +25,10 @@ function simulateKeyup(element, value) {
 }
 
 describe('dataBinding', () => {
+    afterAll(() => {
+        global.fetch = originalFetch;
+    });
+
     beforeEach(async () => {
         document.body.innerHTML = '<div id="app"></div>';
         const element = document.getElementById('app');
@@ -37,7 +42,7 @@ describe('dataBinding', () => {
 
         simulateKeyup(input, 'John Doe');
 
-        expect(target.innerHTML).toBe('John Doe');
+        expect(target.textContent).toBe('John Doe');
     });
 
     test('should bind surname data from one input to another input', () => {

@@ -5,13 +5,18 @@ export default class dataBinding {
 
   async init() {
     if (process.env.NODE_ENV !== 'production') {
-      const response = await fetch('components/dataBinding/dataBinding.html');
-      const dataBindinghtml = await response.text();
-      this.element.innerHTML = dataBindinghtml;
+      try {
+        const response = await fetch('components/dataBinding/dataBinding.html');
+        const dataBindinghtml = await response.text();
+        this.element.innerHTML = dataBindinghtml;
+      } catch (error) {
+        console.error('Failed to load dataBinding component:', error);
+        return;
+      }
     }
 
-    (function () {
-      var elements = document.querySelectorAll('[data-tw-bind]'),
+    ((container) => {
+      var elements = container.querySelectorAll('[data-tw-bind]'),
         scope = {};
       elements.forEach(function (element) {
 
@@ -39,7 +44,7 @@ export default class dataBinding {
                       element.value = newValue;
                     }
                     else if (!element.type) {
-                      element.innerHTML = newValue;
+                      element.textContent = newValue;
                     }
                   }
                 });
@@ -52,6 +57,6 @@ export default class dataBinding {
           }
         }
       });
-    })();
+    })(this.element);
   }
 }

@@ -23,12 +23,11 @@ fs.writeFile(navigationPath, navigationFileContent, (err) => {
         const viewsNames = require('./navigation.js');
         const viewsArray = Object.values(viewsNames);
         const navTemplate = `<nav><ul><li><a href="/#home">Home</a></li>${viewsArray
+            .filter((viewsName) => viewsName !== '404' && viewsName !== 'home')
             .map((viewsName) => {
-                if (viewsName !== '404' && viewsName !== 'home') {
-                    return `<li><a href="/#${viewsName}">${viewsName}</a></li>`;
-                }
+                return `<li><a href="/#${viewsName}">${viewsName}</a></li>`;
             })
-            .join(' ')}</ul></nav>`;
+            .join('')}</ul></nav>`;
 
         fs.writeFile('./src/layout/nav/nav.html', navTemplate, (err) => {
             if (err) {

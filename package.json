@@ -16,7 +16,7 @@
     "footer-header": "node write-layout-to-index.js",
     "minify-html": "node minify-html.js",
     "prebuild": "node write-components-to-html.js",
-    "build-1": "rimraf dist && webpack --mode production && cp -R src/components dist/components && cp -R src/layout dist/layout && cp -R src/views dist/views && cp -R src/images dist/images && yarn merge-scss ",
+    "build-1": "rimraf dist && webpack --mode production && mkdir -p dist/components dist/layout dist/views dist/images && cp -R src/components/ dist/components/ && cp -R src/layout/ dist/layout/ && cp -R src/views/ dist/views/ && cp -R src/images/ dist/images/ && yarn merge-scss ",
     "build-2": "yarn footer-header",
     "build-3": "cp src/index.html.template dist/index.html.template && rimraf ./dist/components/**/*.html ./dist/views/**/*.html ./dist/index.html && cp src/404.html dist/404.html",
     "build-4": "yarn remove-template",
@@ -25,7 +25,7 @@
     "build": "yarn build-1 && yarn build-2 && yarn build-3 && yarn build-4 && yarn build-5 && yarn build-6",
     "build-static": "node build-static.js",
     "start": "webpack-dev-server --open --mode development",
-    "postinstall": "node setup.js"
+    "setup": "node setup.js"
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",

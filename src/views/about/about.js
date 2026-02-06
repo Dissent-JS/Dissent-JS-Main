@@ -4,29 +4,33 @@ function about() {
     const getSomeDataForAnExample = {
 
         async getData() {
-            const response = await fetch('https://api.agify.io?name=anna');
-            const data = await response.json();
-            return data;
+            try {
+                const response = await fetch('https://api.agify.io?name=anna');
+                if (!response.ok) {
+                    throw new Error(`API request failed with status ${response.status}`);
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Failed to fetch data:', error);
+                return null;
+            }
         },
 
         async render() {
             const data = await this.getData();
-            const text2 = `The ladies name is ${data.name} and she is ${data.age} years old.`;
-            ty.innerHTML = text2;
-
+            if (data && ty) {
+                const text2 = `The ladies name is ${data.name} and she is ${data.age} years old.`;
+                ty.textContent = text2;
+            }
         }
     };
     getSomeDataForAnExample.render();
 
 };
 
-try {
-    if (process.env.NODE_ENV === 'test') {
-        module.exports = { about };
-    }
-} catch (error) {
-    if (!(error.name === 'ReferenceError' && error.message.includes('process is not defined'))) {
-        console.error('An unexpected error occurred:', error);
-    }
+/* istanbul ignore else */
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { about };
 }
 

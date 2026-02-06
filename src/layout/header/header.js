@@ -7,17 +7,21 @@ export default class header {
 
   async init() {
     if (process.env.NODE_ENV !== 'production') {
-      const response = await fetch('./layout/header/header.html');
-      const headerhtml = await response.text();
+      try {
+        const response = await fetch('./layout/header/header.html');
+        const headerhtml = await response.text();
 
-      if (process.env.NODE_ENV !== 'production') {
-        const response2 = await fetch('./layout/nav/nav.html');
-        const navhtml = await response2.text();
-        this.element.innerHTML = headerhtml;
-        const navHolder = document.getElementById('nav');
-        navHolder.innerHTML = navhtml;
-      } else {
-        this.element.innerHTML = headerhtml;
+        if (process.env.NODE_ENV !== 'production') {
+          const response2 = await fetch('./layout/nav/nav.html');
+          const navhtml = await response2.text();
+          this.element.innerHTML = headerhtml;
+          const navHolder = document.getElementById('nav');
+          navHolder.innerHTML = navhtml;
+        } else {
+          this.element.innerHTML = headerhtml;
+        }
+      } catch (error) {
+        console.error('Failed to load header component:', error);
       }
     }
 
@@ -26,23 +30,26 @@ export default class header {
   }
 
   initScrollEffect() {
-    // Wait a moment to ensure DOM is loaded
-    setTimeout(() => {
-      // Get the fixed header element
-      this.fixedHeader = document.querySelector('.fixed-header');
+    // Get the fixed header element
+    this.fixedHeader = document.querySelector('.fixed-header');
 
-      if (this.fixedHeader) {
-        // Add initial transparent background
-        this.fixedHeader.style.backgroundColor = 'rgba(0, 0, 0, 0)';
-        this.fixedHeader.style.transition = 'background-color 0.3s ease';
-
-        // Add scroll event listener
-        window.addEventListener('scroll', this.handleScroll.bind(this));
-
-        // Call once to set initial state
-        this.handleScroll();
+    if (this.fixedHeader) {
+      // Prevent duplicate scroll listeners
+      if (this._boundScrollHandler) {
+        window.removeEventListener('scroll', this._boundScrollHandler);
       }
-    }, 100);
+
+      // Add initial transparent background
+      this.fixedHeader.style.backgroundColor = 'rgba(0, 0, 0, 0)';
+      this.fixedHeader.style.transition = 'background-color 0.3s ease';
+
+      // Store bound reference so we can remove it later
+      this._boundScrollHandler = this.handleScroll.bind(this);
+      window.addEventListener('scroll', this._boundScrollHandler);
+
+      // Call once to set initial state
+      this.handleScroll();
+    }
   }
 
   handleScroll() {

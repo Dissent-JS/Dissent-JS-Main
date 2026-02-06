@@ -7,6 +7,12 @@ if (!componentName) {
   process.exit(1)
 }
 
+// Validate component name to prevent path traversal
+if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(componentName)) {
+  console.error('Component name must start with a letter and contain only letters, numbers, hyphens, and underscores')
+  process.exit(1)
+}
+
 const useTypeScript = fs.existsSync(path.join(__dirname, 'tsconfig.json'));
 const ext = useTypeScript ? 'ts' : 'js';
 

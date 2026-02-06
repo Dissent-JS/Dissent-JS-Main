@@ -106,6 +106,9 @@ module.exports = {
 
                 // Copy images
                 { from: 'src/images', to: 'images' },
+
+                // Copy security headers file
+                { from: '_headers', to: '.' },
             ],
         }),
     ],

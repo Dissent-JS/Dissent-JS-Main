@@ -16,7 +16,7 @@ async function initiate() {
     }
     await Promise.all(viewPromises).then(async () => {
 
-        const componentLayoutPromises = [];
+        const allInitPromises = [];
         const componentFiles = requireComponent.keys();
         const layoutFiles = requireLayout.keys();
         for (let i = 0; i < componentFiles.length + layoutFiles.length; i++) {
@@ -47,33 +47,37 @@ async function initiate() {
 
             const elements = document.querySelectorAll(`.${name}`);
             if (Class) {
-                const componentLayoutPromises = Array.from(elements, element => {
-                    const instance = new Class(element);
-                    return instance.init();
-                });
-
-                setTimeout(() => {
-                    const components = document.querySelectorAll(`header .${name}, footer .${name}`);
-                    const componentLayoutPromises = Array.from(components, element => {
+                // Initialise elements, skipping any already initialised
+                const initPromises = Array.from(elements)
+                    .filter(element => !element.hasAttribute('data-dissent-init'))
+                    .map(element => {
+                        element.setAttribute('data-dissent-init', 'true');
                         const instance = new Class(element);
                         return instance.init();
                     });
-                }, 300);
+                allInitPromises.push(...initPromises);
+
+                // Also initialise layout components inside header/footer
+                const layoutComponents = document.querySelectorAll(`header .${name}, footer .${name}`);
+                const layoutPromises = Array.from(layoutComponents)
+                    .filter(element => !element.hasAttribute('data-dissent-init'))
+                    .map(element => {
+                        element.setAttribute('data-dissent-init', 'true');
+                        const instance = new Class(element);
+                        return instance.init();
+                    });
+                allInitPromises.push(...layoutPromises);
             }
         }
-        await Promise.all(componentLayoutPromises);
+        await Promise.all(allInitPromises);
     });
 }
 
+// Expose initiate function globally for router to use
+window.initiate = initiate;
+
 window.onload = () => {
     initiate();
-};
-
-window.onpopstate = () => {
-    setTimeout(() => {
-        initiate();
-    }, 150);
-
 };
 
 if (process.env.NODE_ENV === 'test') {
@@ -85,4 +89,3 @@ if (process.env.NODE_ENV === 'test') {
     requireLayoutTests.keys().forEach(requireLayoutTests);
     requireViewTests.keys().forEach(requireViewTests);
 }
-

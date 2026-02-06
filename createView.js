@@ -7,6 +7,12 @@ if (!viewName) {
   process.exit(1)
 }
 
+// Validate view name to prevent path traversal
+if (!/^[a-zA-Z][a-zA-Z0-9_-]*$/.test(viewName)) {
+  console.error('View name must start with a letter and contain only letters, numbers, hyphens, and underscores')
+  process.exit(1)
+}
+
 // Create the component directory
 const componentDir = path.join(__dirname, 'src', 'views', viewName)
 fs.mkdirSync(componentDir)

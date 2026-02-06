@@ -5,9 +5,13 @@ export default class nav {
 
     async init() {
         if (process.env.NODE_ENV !== 'production') {
-            const response = await fetch('layout/nav/nav.html');
-            const navHtml = await response.text();
-            this.element.innerHTML = navHtml;
+            try {
+                const response = await fetch('layout/nav/nav.html');
+                const navHtml = await response.text();
+                this.element.innerHTML = navHtml;
+            } catch (error) {
+                console.error('Failed to load nav component:', error);
+            }
         }
 
         // Add any navigation-specific functionality here

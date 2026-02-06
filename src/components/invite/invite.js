@@ -7,12 +7,18 @@ export default class invite {
 
   async init() {
     if (process.env.NODE_ENV !== 'production') {
-      const response = await fetch('components/invite/invite.html');
-      const invitehtml = await response.text();
-      this.element.innerHTML = invitehtml;
+      try {
+        const response = await fetch('components/invite/invite.html');
+        const invitehtml = await response.text();
+        this.element.innerHTML = invitehtml;
+      } catch (error) {
+        console.error('Failed to load invite component:', error);
+        return;
+      }
     }
-    function invite() {
-      const inviteForm = document.getElementById('invite-form');
+
+    const inviteForm = document.getElementById('invite-form');
+    if (inviteForm) {
       inviteForm.addEventListener('submit', (e) => {
         e.preventDefault();
         const email = document.getElementById('email').value;
@@ -20,8 +26,5 @@ export default class invite {
         console.log(email);
       });
     }
-
-    window.invite = invite;
-
   }
 }

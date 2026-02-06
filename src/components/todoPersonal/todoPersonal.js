@@ -7,9 +7,14 @@ export default class todoPersonal {
 
   async init() {
     if (process.env.NODE_ENV !== 'production') {
-      const response = await fetch('components/todoPersonal/todoPersonal.html');
-      const todoPersonalhtml = await response.text();
-      this.element.innerHTML = todoPersonalhtml;
+      try {
+        const response = await fetch('components/todoPersonal/todoPersonal.html');
+        const todoPersonalhtml = await response.text();
+        this.element.innerHTML = todoPersonalhtml;
+      } catch (error) {
+        console.error('Failed to load todoPersonal component:', error);
+        return;
+      }
     }
 
     // Initialize the component directly
@@ -83,8 +88,17 @@ export default class todoPersonal {
     }
 
     function getTodos() {
-      const todos = localStorage.getItem('todos');
-      return todos ? JSON.parse(todos) : [];
+      try {
+        const todos = localStorage.getItem('todos');
+        if (!todos) return [];
+        const parsed = JSON.parse(todos);
+        // Validate that parsed data is an array of strings
+        if (!Array.isArray(parsed)) return [];
+        return parsed.filter(item => typeof item === 'string');
+      } catch (error) {
+        console.error('Failed to parse todos from localStorage:', error);
+        return [];
+      }
     }
   }
 }
