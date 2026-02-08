@@ -79,13 +79,13 @@ For clean URL routing to work, your server must serve `index.html` for all route
 
 ### Building static HTML pages for SEO
 
-For better search engine optimization, you can build static HTML pages:
+For better search engine optimisation, you can build static HTML pages:
 
 `yarn build-static`
 
 This generates individual HTML files for each view (e.g., `home.html`, `about.html`) with content pre-rendered, making them SEO-friendly while maintaining the component architecture. Each page includes unique meta tags, full HTML content that's immediately available to search engines, and minified HTML for optimal performance.
 
-**Asset Behavior:**
+**Asset Behaviour:**
 
 - When run independently: Creates minimal CSS and JS assets for basic styling and functionality
 - When run after `yarn build`: Uses the full compiled assets from the regular build for complete functionality
@@ -113,14 +113,23 @@ To add a view to the navigation/menu, use this
 
 `yarn create-nav`
 
-and the view will be added to the navigation/menu in the header
+And the view will be added to the navigation/menu in the header
 
 ### Testing
 
 'yarn jest`
 
-although the intention is to make Dissent.js agnostic, Jest hass been added as a kickstarter to add testing. Other testing libraries will be considered later. In this version of Dissent.js, the tests are removed from the src folder and placed in the **test** folder. This is allow us ease in adding libraries as we move on.
+Although the intention is to make Dissent.js agnostic, Jest has been added as a kickstarter to add testing. Other testing libraries will be considered later. In this version of Dissent.js, the tests are removed from the src folder and placed in the **test** folder. This is allow us ease in adding libraries as we move on.
 
 ## Conclusion
 
 Dissent.js provides a simple and easy way to create reusable components for your web application. If you have any questions or run into any issues, feel free to open an issue on the GitHub repository.
+
+## in the wild
+Dissent.js is primarily used for quickstart projects for various internal POC's and intranets for _that big conglomerate_ that we are not allowed to talk about. It is also in the wild for: 
+<a href='https://glare9.com'>Glare 9</a>
+
+<a href='https://theidealcollective.ai'>the ideal collective</a>
+
+<a href='https://myfatherscravat.com'>My Fathers Cravat</a>
+
