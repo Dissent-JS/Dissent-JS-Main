@@ -137,9 +137,20 @@ function getRouteFromUrl() {
     return path || ''; // Return empty string for root path
 }
 
+function updateActiveNavLink(currentPath) {
+    const navLinks = document.querySelectorAll('#nav a, nav a');
+    navLinks.forEach(link => {
+        const href = (link.getAttribute('href') || '').replace('/', '');
+        link.classList.toggle('active', href === currentPath);
+    });
+}
+
 function navigateTo(path) {
     // Use History API for clean URLs
     window.history.pushState(null, null, `/${path}`);
+
+    // Update nav active link state
+    updateActiveNavLink(path);
 
     // Clear any existing content before routing to ensure clean initialization
     const viewContainer = document.querySelector('#view-container');
@@ -167,7 +178,11 @@ if (!document.querySelector('meta[name="static-build"]')) {
     router();
 
     // Listen for browser back/forward buttons
-    window.addEventListener('popstate', router);
+    window.addEventListener('popstate', function () {
+        const path = getRouteFromUrl() || 'home';
+        updateActiveNavLink(path);
+        router();
+    });
 
     // Intercept link clicks for SPA navigation
     document.addEventListener('click', handleLinkClick);

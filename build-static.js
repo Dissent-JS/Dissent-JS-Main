@@ -92,12 +92,17 @@ function generateStaticPages() {
     }
 
     if (fs.existsSync(footerPath)) {
-        const footerContent = fs.readFileSync(footerPath, 'utf8')
+        let footerContent = fs.readFileSync(footerPath, 'utf8')
             .replace(/<!--.*?-->/gs, '') // Strip HTML comments
             .trim();
-        // footerContent already contains <footer class="footer">...</footer>,
-        // so replace the entire empty footer tag with the content directly
-        baseTemplate = baseTemplate.replace(/<footer class="footer">[\s\S]*?<\/footer>/, footerContent);
+        // Strip the outer <footer class="footer">...</footer> wrapper from footer.html
+        // if present, so we can inject just the inner content — preserving the
+        // wrapper element from index.html (consistent with how header injection works).
+        const footerInnerMatch = footerContent.match(/<footer\s+class="footer"\s*>([\s\S]*)<\/footer>/);
+        if (footerInnerMatch) {
+            footerContent = footerInnerMatch[1].trim();
+        }
+        baseTemplate = baseTemplate.replace(/<footer class="footer">[\s\S]*?<\/footer>/, `<footer class="footer">${footerContent}</footer>`);
     }
 
     // Get all views
@@ -138,7 +143,7 @@ function generateStaticPages() {
 
             // Fix navigation links for static build (add .html extensions)
             pageHtml = pageHtml.replace(/href="\/home"/g, 'href="index.html"');
-            pageHtml = pageHtml.replace(/href="\/(about|contact)"/g, 'href="$1.html"');
+            pageHtml = pageHtml.replace(/href="\/([\w-]+)"/g, 'href="$1.html"');
 
             // Add meta tag to indicate this is a static build
             pageHtml = pageHtml.replace('<head>', '<head><meta name="static-build" content="true">');
@@ -192,7 +197,7 @@ function generateStaticPages() {
 
         // Fix navigation links for static build (add .html extensions)
         indexHtml = indexHtml.replace(/href="\/home"/g, 'href="index.html"');
-        indexHtml = indexHtml.replace(/href="\/(about|contact)"/g, 'href="$1.html"');
+        indexHtml = indexHtml.replace(/href="\/([\w-]+)"/g, 'href="$1.html"');
 
         // Add meta tag to indicate this is a static build
         indexHtml = indexHtml.replace('<head>', '<head><meta name="static-build" content="true">');
@@ -248,6 +253,17 @@ function copyAssets(existingAssets = {}) {
         }
         copyDirectoryRecursive(imagesSrc, imagesDest);
         console.log('Copied images directory');
+    }
+
+    // Copy fonts from src (mirrors images copy logic)
+    const fontsSrc = path.join(__dirname, 'src', 'fonts');
+    const fontsDest = path.join(distDirectory, 'fonts');
+    if (fs.existsSync(fontsSrc)) {
+        if (!fs.existsSync(fontsDest)) {
+            fs.mkdirSync(fontsDest, { recursive: true });
+        }
+        copyDirectoryRecursive(fontsSrc, fontsDest);
+        console.log('Copied fonts directory');
     }
 
     // Copy component files (CSS, JS, HTML)
@@ -445,7 +461,7 @@ function buildStaticJS() {
 
 // Function to copy component files
 function copyComponentFiles() {
-    // Copy component files
+    // Copy and compile component files
     const componentsSrc = path.join(__dirname, 'src', 'components');
     const componentsDest = path.join(distDirectory, 'components');
 
@@ -453,6 +469,35 @@ function copyComponentFiles() {
         if (!fs.existsSync(componentsDest)) {
             fs.mkdirSync(componentsDest, { recursive: true });
         }
+
+        // Compile each component's SCSS to CSS
+        const components = fs.readdirSync(componentsSrc).filter(item =>
+            fs.statSync(path.join(componentsSrc, item)).isDirectory()
+        );
+
+        components.forEach(name => {
+            const compDest = path.join(componentsDest, name);
+            if (!fs.existsSync(compDest)) {
+                fs.mkdirSync(compDest, { recursive: true });
+            }
+
+            const scssFile = path.join(componentsSrc, name, `${name}.scss`);
+            if (fs.existsSync(scssFile)) {
+                try {
+                    const result = sass.renderSync({
+                        file: scssFile,
+                        includePaths: [path.join(__dirname, 'src/styles')]
+                    });
+                    fs.writeFileSync(
+                        path.join(compDest, `${name}.css`),
+                        result.css.toString()
+                    );
+                    console.log(`Compiled SCSS for component ${name}`);
+                } catch (error) {
+                    console.log(`Could not compile SCSS for component ${name}: ${error.message}`);
+                }
+            }
+        });
 
         console.log('Copied component files');
     }
@@ -690,15 +735,26 @@ function mergeAllCSSIntoMain() {
     // Start fresh with global styles compiled from source
     let finalCssContent = '';
 
-    // Compile global styles in the correct order
-    const globalStyles = [
-        'src/styles/normalise.scss',
-        'src/styles/boilerplate.scss',
-        'src/styles/variables.scss',
-        'src/styles/mixin.scss',
-        'src/styles/global.scss',
-        'src/styles/typography.scss'
+    // Dynamically discover global styles from src/styles/
+    // Define preferred order (matching index.js imports); any additional files are appended
+    const preferredOrder = [
+        'normalise.scss',
+        'boilerplate.scss',
+        'variables.scss',
+        'mixin.scss',
+        'global.scss',
+        'typography.scss'
     ];
+    const stylesDir = path.join(__dirname, 'src', 'styles');
+    const allStyleFiles = fs.existsSync(stylesDir)
+        ? fs.readdirSync(stylesDir).filter(f => f.endsWith('.scss'))
+        : [];
+    // Build ordered list: preferred order first, then any extras
+    const orderedFiles = preferredOrder.filter(f => allStyleFiles.includes(f));
+    allStyleFiles.forEach(f => {
+        if (!orderedFiles.includes(f)) orderedFiles.push(f);
+    });
+    const globalStyles = orderedFiles.map(f => `src/styles/${f}`);
 
     globalStyles.forEach(stylePath => {
         const fullPath = path.join(__dirname, stylePath);
@@ -734,8 +790,32 @@ function mergeAllCSSIntoMain() {
         }
     });
 
-    // View components to merge (views should come last to override layout styles)
-    const viewComponents = ['home', 'about', 'contact', '404'];
+    // Dynamically discover view components (instead of a hardcoded list)
+    const viewsDistDir = path.join(distDirectory, 'views');
+    const viewComponents = fs.existsSync(viewsDistDir)
+        ? fs.readdirSync(viewsDistDir).filter(item =>
+            fs.statSync(path.join(viewsDistDir, item)).isDirectory()
+        )
+        : [];
+
+    // Merge component CSS (counter, dataBinding, etc.) between layout and view CSS
+    const componentsDistDir = path.join(distDirectory, 'components');
+    if (fs.existsSync(componentsDistDir)) {
+        const componentDirs = fs.readdirSync(componentsDistDir).filter(item =>
+            fs.statSync(path.join(componentsDistDir, item)).isDirectory()
+        );
+        componentDirs.forEach(compName => {
+            const compCssPath = path.join(componentsDistDir, compName, `${compName}.css`);
+            if (fs.existsSync(compCssPath)) {
+                const compCss = fs.readFileSync(compCssPath, 'utf8');
+                if (compCss.trim()) {
+                    finalCssContent += '\n/* ' + compName + ' component styles */\n' + compCss;
+                    cssAdded = true;
+                    console.log(`Merged ${compName} component CSS into main.min.css`);
+                }
+            }
+        });
+    }
 
     viewComponents.forEach(viewName => {
         const viewCssPath = path.join(distDirectory, 'views', viewName, `${viewName}.css`);
@@ -752,6 +832,19 @@ function mergeAllCSSIntoMain() {
     });
 
     if (cssAdded || finalCssContent.trim()) {
+        // Rewrite relative URLs so they resolve from the dist root.
+        // Component/view SCSS files use paths like url("../../images/...") which break
+        // when merged into a root-level main.min.css.
+        finalCssContent = finalCssContent.replace(
+            /url\(['"]?(\.\.\/)+/g,
+            'url("./'
+        );
+        // Ensure closing quote consistency after rewrite
+        finalCssContent = finalCssContent.replace(
+            /url\("\.\/([^"\)]+)['"]?\)/g,
+            'url("./$1")'
+        );
+
         // Write the merged CSS back (this replaces the webpack CSS with properly ordered CSS)
         fs.writeFileSync(mainCssPath, finalCssContent);
 
